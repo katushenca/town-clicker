@@ -13,27 +13,7 @@ public class Seed
                 var passwordHasher = new PasswordHasher<User>();
                 
                 context.Database.EnsureCreated();
-
-                if (!context.Users.Any())
-                {
-
-                    var admin = new User
-                    {
-                        Id = 1,
-                        Username = "admin"
-                    };
-                    admin.PasswordHash = passwordHasher.HashPassword(admin, "admin123");
-                    context.Users.Add(admin);
-                    var player = new User()
-                    {
-                        Id = 2,
-                        Username = "player"
-                    };
-                    player.PasswordHash = passwordHasher.HashPassword(player, "player");
-                    context.Users.Add(player);
-                    context.SaveChanges();
-
-                }
+                
                 if (!context.Inventories.Any())
                 {
                     context.Inventories.AddRange(new List<Inventory>()
@@ -41,12 +21,12 @@ public class Seed
                         new Inventory()
                         {
                             Id = 1,
-                            UserId = 1
+                            UserId = "d79fd03d-5cac-4d65-bf28-220ee823f954"
                         },
                         new Inventory()
                         {
                             Id = 2,
-                            UserId = 2
+                            UserId = "7431b356-281c-485e-a63f-f7f1b856ac3c"
                         }
                     });
                     context.SaveChanges();
@@ -108,14 +88,14 @@ public class Seed
                         new UserStatistics()
                         {
                             Id = 1,
-                            UserId = 1,
+                            UserId = "d79fd03d-5cac-4d65-bf28-220ee823f954",
                             Money = 300,
                             Clicks = 21312
                         },
                         new UserStatistics()
                         {
                             Id = 2,
-                            UserId = 2,
+                            UserId = "7431b356-281c-485e-a63f-f7f1b856ac3c",
                             Money = 1000,
                             Clicks = 5000
                         }
@@ -141,10 +121,9 @@ public class Seed
     
                     context.UsersUpgrades.AddRange(new List<UserUpgrades>()
                     {
-                        new UserUpgrades { UserId = 1, UpgradeId = 1, Level = 5 },
-                        new UserUpgrades { UserId = 2, UpgradeId = 2, Level = 6 }
+                        new UserUpgrades { UserId = "d79fd03d-5cac-4d65-bf28-220ee823f954", UpgradeId = 1, Level = 5 },
+                        new UserUpgrades { UserId = "7431b356-281c-485e-a63f-f7f1b856ac3c", UpgradeId = 2, Level = 6 }
                     }.Where(u => 
-                        existingUserIds.Contains(u.UserId) && 
                         existingUpgradeIds.Contains(u.UpgradeId))
                             .ToList());
     
@@ -153,6 +132,52 @@ public class Seed
                 
                 
 
+            }
+        }
+    
+    public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                //Roles
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                if (!await roleManager.RoleExistsAsync(UserRoles.User))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+
+                //Users
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var adminUserEmail = "shutenko.katya@bk.ru";
+
+                var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
+                if (adminUser == null)
+                {
+                    var newAdminUser = new User()
+                    {
+                        UserName = "admin",
+                        Email = adminUserEmail,
+                        EmailConfirmed = true,
+                    };
+                    await userManager.CreateAsync(newAdminUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
+                }
+
+                string appUserEmail = "user@mail.ru";
+
+                var appUser = await userManager.FindByEmailAsync(appUserEmail);
+                if (appUser == null)
+                {
+                    var newAppUser = new User()
+                    {
+                        UserName = "player",
+                        Email = appUserEmail,
+                        EmailConfirmed = true,
+                    };
+                    await userManager.CreateAsync(newAppUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
+                }
             }
         }
 }
