@@ -1,26 +1,31 @@
 ﻿@using TownClicker.ViewModels
-@model LoginViewModel
+@model RegisterViewModel
+
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Регистрация";
 }
+
 <div class="row">
     <div class="col-md-6 offset-3">
         <p>
-        <h4>Войти</h4>
+        <h4>Регистрация</h4>
         </p>
-        @if(TempData["Error"] != null)
+
+        @if (TempData["Error"] != null)
         {
             <div class="col-md-12 alert alert-danger">
-                <span><b>Sorry!</b> - @TempData["Error"]</span>
+                <span><b>Sorry!</b> - @TempData["Error"] </span>
             </div>
         }
+
         <div class="row">
             <div class="col-md-8 offset-2">
-                <form asp-action="Login">
+                <form asp-action="Register">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <div class="form-group">
                         <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control">
+                        <input asp-for="Email" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -29,7 +34,13 @@
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input class="btn btn-outline-success float right" type="submit" value="Войти" />
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="btn btn-outline-success float-right" type="submit" value="Зарегистрироваться" />
                         <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Отмена</a>
                     </div>
                 </form>

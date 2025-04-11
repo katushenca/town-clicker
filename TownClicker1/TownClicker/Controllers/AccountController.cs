@@ -49,4 +49,49 @@ public class AccountController : Controller
         TempData["Error"] = "Неправильный логин или пароль";
         return View(loginViewModel);
     }
+    
+    [HttpGet]
+    public IActionResult Register()
+    {
+        var response = new RegisterViewModel();
+        return View(response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+    {
+        if (!ModelState.IsValid) return View(registerViewModel);
+        
+        var user = await userManager.FindByEmailAsync(registerViewModel.Email);
+        if (user != null)
+        {
+            TempData["Error"] = "Пользователь с таким email уже создан";
+            return View(registerViewModel);
+        }
+
+        var newUser = new User()
+        {
+            Email = registerViewModel.Email,
+            UserName = registerViewModel.Email
+        };
+        var newUserResponse = await userManager.CreateAsync(newUser, registerViewModel.Password);
+        if (newUserResponse.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newUser, UserRoles.User);
+            return View("RegisterCompleted");
+        }
+
+        foreach (var error in newUserResponse.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+        return View(registerViewModel);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        await signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
 }
