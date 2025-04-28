@@ -3,34 +3,40 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div class="row">
-    <div class="col-md-6 offset-3">
+<div>
+    <div>
         <p>
         <h4>Войти</h4>
         </p>
         @if(TempData["Error"] != null)
         {
-            <div class="col-md-12 alert alert-danger">
+            <div>
                 <span><b>Sorry!</b> - @TempData["Error"]</span>
             </div>
         }
-        <div class="row">
-            <div class="col-md-8 offset-2">
+        <div>
+            <div>
                 <form asp-action="Login">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control">
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div>
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email">
+                        <span asp-validation-for="Email"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                    <div>
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password"/>
+                        <span asp-validation-for="Password"></span>
                     </div>
-                    <div class="form-group">
-                        <input class="btn btn-outline-success float right" type="submit" value="Войти" />
-                        <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Отмена</a>
+                    <div>
+                        <input type="submit" value="Войти" />
+                        <a asp-controller="Home" asp-action="Index">Отмена</a>
+                    </div>
+                    <div>
+                        <a asp-controller="Account" asp-action="Register">Регистрация</a>
+                    </div>
+                    <div>
+                        <a asp-controller="Account" asp-action="Logout">Выйти из аккаунта</a>
                     </div>
                 </form>
             </div>
