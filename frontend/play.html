@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Town Clicker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' type='text/css' media='screen' href='styles/main.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='styles/menu.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='styles/field.css'>
+</head>
+
+<body>
+  <main>
+    <div id="grid-container">
+      <div id="grid-wrapper">
+        <div id="grid"></div>
+      </div>
+    </div>
+  </main>
+
+  <header>
+    <div class="header-left">
+      <div class="header-left-top">
+        <div class="level-box"><span id="level-value">1</span></div>
+        <span class="resources-item">
+          <img class="resources-icon" src="images/coin.png" alt="Coins" width="24">
+          <span id="coin-count">1000</span>
+        </span>
+        <span class="resources-item">
+          <img class="resources-icon" src="images/click.png" alt="Clicks" width="24">
+          <span id="click-count">1000</span>
+        </span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-bar-progress" id="progress-bar-value" style="width:30%"></div>
+      </div>
+    </div>
+    <div class="header-right">
+      <img class="menu-icon" src="images/user.png" alt="User" width="24" onclick="openMenu('account')">
+    </div>
+  </header>
+
+  <footer>
+    <div class="footer-left">
+      <div class="footer-row">
+        <img class="menu-icon" src="images/shop.png" alt="Shop" onclick="openMenu('shop')">
+      </div>
+      <div class="footer-row">
+        <img class="menu-icon" src="images/chest.png" alt="Chest" onclick="openMenu('inventory')">
+        <img class="menu-icon" src="images/swap.png" alt="Swap" onclick="openMenu('trade')">
+      </div>
+    </div>
+    <button class="click-button">ТЫК</button>
+    <div class="footer-right">
+      <div class="footer-row">
+        <img class="menu-icon" src="images/rank.png" alt="Rank" onclick="openMenu('rank')">
+      </div>
+    </div>
+  </footer>
+
+  <div class="menu-overlay" id="menu-overlay" style="display: none;">
+    <div class="menu">
+      <button class="menu-close-btn" onclick="closeMenu()">×</button>
+      <h2 class="menu-title" id="menu-title-text">Menu</h2>
+      <div id="menu-content">
+        <!-- ... -->
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/menu.js"></script>
+  <script src="scripts/engine.js"></script>
+</body>
+
+</html>

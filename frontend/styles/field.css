@@ -1,0 +1,44 @@
+#grid-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#grid-wrapper {
+  width: 10000px;
+  height: 10000px;
+  position: absolute;
+  transform-origin: 0 0;
+  will-change: transform;
+  background: url('../images/grass.png');
+}
+
+#grid {
+  width: 6400px;
+  height: 6400px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(100, 64px);
+  grid-template-rows: repeat(100, 64px);
+  transform: rotateX(60deg) rotateZ(45deg);
+}
+
+.cell {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  /*background: rgba(255, 255, 255, 0.2);*/
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.sprite {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: rotateZ(-45deg) rotateY(60deg) scale(2.828427) translate(0, -15px);
+  z-index: -1;
+}
