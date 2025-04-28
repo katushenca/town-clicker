@@ -7,6 +7,9 @@ public class RegisterViewModel
     [Display(Name = "Email Address")]
     [Required(ErrorMessage = "Введите email адрес")]
     public string Email { get; set; }
+    [Display(Name = "Username")]
+    [Required(ErrorMessage = "Введите Username")]
+    public string Username { get; set; }
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; }

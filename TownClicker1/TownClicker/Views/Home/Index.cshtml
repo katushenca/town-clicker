@@ -42,6 +42,10 @@
     </div>
     <div class="header-right">
         <a asp-controller="Account" asp-action="Login">
+            @if (User.Identity is { IsAuthenticated: true })
+            {
+                <span>@User.Identity.Name</span>
+            }
             <img class="menu-icon" src="images/user.png" alt="User" width="24">
         </a>
     </div>
