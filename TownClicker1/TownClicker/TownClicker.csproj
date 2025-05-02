@@ -82,4 +82,8 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\css\styles.css" />
+    </ItemGroup>
+
 </Project>
