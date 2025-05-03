@@ -12,6 +12,7 @@ body {
     color: #333;
 }
 
+.register-container,
 .login-container {
     width: 100%;
     background-color: white;
@@ -38,7 +39,7 @@ body {
 }
 
 .form-fields {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .form-fields label {
@@ -49,7 +50,8 @@ body {
 }
 
 .form-fields input[type="email"],
-.form-fields input[type="password"] {
+.form-fields input[type="password"],
+.form-fields input[type="text"] {
     width: 100%;
     padding: 15px 15px;
     border: 2px solid #ddd;
@@ -59,10 +61,16 @@ body {
 }
 
 .form-fields input[type="email"]:focus,
-.form-fields input[type="password"]:focus {
+.form-fields input[type="password"]:focus,
+.form-fields input[type="text"]:focus {
     border-color: #4a90e2;
     outline: none;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.form-fields .field-validation {
+    color: red;
+    font-size: 16px;
 }
 
 .click-button {

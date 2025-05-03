@@ -4,11 +4,13 @@ namespace TownClicker.ViewModels;
 
 public class LoginViewModel
 {
-    [Display(Name = "Email Address")]
-    [Required(ErrorMessage = "Введите email адрес")]
+    [Display(Name = "Email")]
+    [Required(ErrorMessage = "Введите email")]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
-    [Required]
+    
+    [Display(Name = "Пароль")]
+    [Required(ErrorMessage = "Введите пароль")]
     [DataType(DataType.Password)]
     public string Password { get; set; }
 }

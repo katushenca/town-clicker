@@ -83,7 +83,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\css\styles.css" />
+      <None Include="wwwroot\css\login.css" />
     </ItemGroup>
 
 </Project>
