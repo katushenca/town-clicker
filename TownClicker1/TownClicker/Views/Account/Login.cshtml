@@ -3,14 +3,25 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Town Clicker</title>
+    <link rel='stylesheet' type='text/css' media='screen' href="/css/login.css">
+</head>
+
+<body>
+<div class="login-container">
     <div>
         <p>
-        <h4>Войти</h4>
+            <h2>Войти</h2>
         </p>
         @if(TempData["Error"] != null)
         {
-            <div>
+            <div class="error-message">
                 <span><b>Sorry!</b> - @TempData["Error"]</span>
             </div>
         }
@@ -18,24 +29,24 @@
             <div>
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly"></div>
-                    <div>
+                    <div class="form-fields">
                         <label asp-for="Email"></label>
                         <input asp-for="Email">
-                        <span asp-validation-for="Email"></span>
+                        <span class="field-validation" asp-validation-for="Email"></span>
                     </div>
-                    <div>
+                    <div class="form-fields">
                         <label asp-for="Password"></label>
                         <input asp-for="Password"/>
-                        <span asp-validation-for="Password"></span>
+                        <span class="field-validation" asp-validation-for="Password"></span>
                     </div>
-                    <div>
+                    <div class="click-button">
                         <input type="submit" value="Войти" />
-                        <a asp-controller="Home" asp-action="Index">Отмена</a>
+                        <a class="cancel-button" asp-controller="Home" asp-action="Index">Отмена</a>
                     </div>
-                    <div>
+                    <div class="bottom-links">
                         <a asp-controller="Account" asp-action="Register">Регистрация</a>
                     </div>
-                    <div>
+                    <div class="bottom-links">
                         <a asp-controller="Account" asp-action="Logout">Выйти из аккаунта</a>
                     </div>
                 </form>
@@ -43,3 +54,6 @@
         </div>
     </div>
 </div>
+</body>
+
+</html>

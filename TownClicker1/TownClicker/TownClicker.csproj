@@ -84,6 +84,7 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\images\improvements\" />
+      <None Include="wwwroot\css\login.css" />
     </ItemGroup>
 
 </Project>
