@@ -57,7 +57,7 @@
             <img class="menu-icon" src="images/shop.png" alt="Shop" onclick="openMenu('shop')">
         </div>
         <div class="footer-row">
-            <img class="menu-icon" src="images/chest.png" alt="Chest" onclick="openMenu('inventory')">
+            <img class="menu-icon" src="images/chest.png" alt="Chest" onclick="openMenu('inventory', '@User.Identity.Name')">
             <img class="menu-icon" src="images/swap.png" alt="Swap" onclick="openMenu('trade')">
         </div>
     </div>
@@ -74,7 +74,7 @@
         <button class="menu-close-btn" onclick="closeMenu()">×</button>
         <h2 class="menu-title" id="menu-title-text">Menu</h2>
         <div id="menu-content">
-            <!-- ... -->
+            <div id="inventory-grid"></div>
         </div>
     </div>
 </div>

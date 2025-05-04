@@ -78,6 +78,11 @@ public class AccountController : Controller
         if (newUserResponse.Succeeded)
         {
             await userManager.AddToRoleAsync(newUser, UserRoles.User);
+            await _context.Inventories.AddAsync(new Inventory()
+            {
+                UserId = newUser.Id
+            });
+            await _context.SaveChangesAsync();
             return View("RegisterCompleted");
         }
 
