@@ -4,7 +4,7 @@ const menuTitleText = document.getElementById("menu-title-text");
 async function openMenu(id, userName) {
   menuTitleText.textContent = id;
   menuOverlay.style.display = 'flex';
-  if (id === 'inventory') {
+  if (id === 'Инвентарь') {
     await loadInventory(userName);
   }
 }
@@ -26,5 +26,18 @@ async function loadInventory(userName) {
             <div class="item-name">${item.skinName}</div>
     `;
     grid.appendChild(div);
+  });
+  await animateItems()
+}
+
+async function animateItems(){
+  const userItems = document.querySelectorAll('.inventory-item');
+  userItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      item.classList.add('highlight');
+    });
+    item.addEventListener('mouseleave', () => {
+      item.classList.remove('highlight');
+    });
   });
 }
