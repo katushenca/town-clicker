@@ -1,11 +1,17 @@
 const menuOverlay = document.getElementById("menu-overlay");
 const menuTitleText = document.getElementById("menu-title-text");
 
-async function openMenu(id, userName) {
+async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
   menuOverlay.style.display = 'flex';
+  const grid = document.getElementById('inventory-grid');
+  
   if (id === 'Инвентарь') {
+    grid.style.display = 'flex';
     await loadInventory(userName);
+  } else {
+    grid.style.display = 'none';
+    grid.innerHTML = '';
   }
 }
 
