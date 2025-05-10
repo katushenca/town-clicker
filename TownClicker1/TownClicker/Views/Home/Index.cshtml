@@ -28,16 +28,25 @@
         <div class="header-left-top">
             <div class="level-box"><span id="level-value">1</span></div>
             <span class="resources-item">
-          <img class="resources-icon" src="images/coin.png" alt="Coins" width="24">
-          <span id="coin-count">1000</span>
-        </span>
+                <img class="resources-icon" src="images/coin.png" alt="Coins" width="24">
+                <span id="coin-count">1000</span>
+            </span>
             <span class="resources-item">
-          <img class="resources-icon" src="images/click.png" alt="Clicks" width="24">
-          <span id="click-count">1000</span>
-        </span>
+                <img class="resources-icon" src="images/click.png" alt="Clicks" width="24">
+                <span id="click-count">1000</span>
+            </span>
         </div>
         <div class="progress-bar">
             <div class="progress-bar-progress" id="progress-bar-value" style="width:30%"></div>
+        </div>
+    </div>
+    <div class="header-center" id="header-center" style="display: none">
+        <div id="upgrade-notification" class="upgrade-popup">
+            <img id="upgrade-image" alt='улучшение' src=''>
+            <div>Улучшение <span id="upgrade-name"></span> активно! Осталось <span id="upgrade-timer">10</span> сек.</div>
+            <div class="progress-container">
+                <div id="upgrade-progress" class="progress-bar"></div>
+            </div>
         </div>
     </div>
     <div class="header-right">
@@ -78,6 +87,8 @@
         </div>
     </div>
 </div>
+
+
 
 <script src="js/menu.js"></script>
 <script src="js/engine.js"></script>

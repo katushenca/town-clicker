@@ -12,6 +12,7 @@ body {
     color: #333;
 }
 
+.new-register-container,
 .register-container,
 .login-container {
     width: 100%;
@@ -20,10 +21,19 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: 20px 30px;
     margin: 0 20px;
-    max-width: 450px;
     box-sizing: border-box;
 }
 
+.register-container,
+.login-container {
+    max-width: 450px;
+}
+
+.new-register-container{
+    max-width: 700px;
+}
+
+.new-register-container,
 .register-container h2,
 .login-container h2 {
     text-align: center;
@@ -135,6 +145,7 @@ body {
         padding: 10px;
     }
     
+    .new-register-container,
     .register-container,
     .login-container {
         padding: 20px 20px;
