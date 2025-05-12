@@ -1,0 +1,147 @@
+﻿
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 22px;
+    background: #F8F4E9;
+    margin: 40px 0;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.register-container,
+.login-container {
+    width: 100%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+    margin: 0 20px;
+    max-width: 450px;
+    box-sizing: border-box;
+}
+
+.register-container h2,
+.login-container h2 {
+    text-align: center;
+    margin: 0 0 30px 0;
+    font-size: 28px;
+}
+
+
+.error-message {
+    background-color: #ffebee;
+    color: red;
+    padding: 15px;
+    display: none;
+}
+
+.form-fields {
+    margin-bottom: 30px;
+}
+
+.form-fields label {
+    display: block;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+.form-fields input[type="email"],
+.form-fields input[type="password"],
+.form-fields input[type="text"] {
+    width: 100%;
+    padding: 15px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+.form-fields input[type="email"]:focus,
+.form-fields input[type="password"]:focus,
+.form-fields input[type="text"]:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.form-fields .field-validation {
+    color: red;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.click-button {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+    gap: 15px;
+}
+
+.click-button input[type="submit"] {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    flex: 1;
+    padding: 15px 15px;
+}
+
+.click-button input[type="submit"]:hover {
+    background-color: #3a7bc8;
+}
+
+.cancel-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 15px;
+    background-color: #e0e0e0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 20px;
+    flex: 1;
+}
+
+.cancel-button:hover {
+    background-color: #c7c7c7;
+}
+
+.bottom-links {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.bottom-links a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.bottom-links a:hover {
+    color: #3a7bc8;
+    text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+    .body {
+        padding: 10px;
+    }
+    
+    .register-container,
+    .login-container {
+        padding: 20px 20px;
+        margin: 0 15px;
+    }
+
+    .click-button {
+        flex-direction: column;
+    }
+}
