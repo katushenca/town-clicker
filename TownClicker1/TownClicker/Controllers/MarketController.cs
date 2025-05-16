@@ -35,7 +35,7 @@ public class MarketController(ApplicationDbContext context, UserManager<User> us
         {
             if (!_context.Upgrades.Any(u => u.Id == upgradeId))
             {
-                if (upgradeId is < 1 or > 13)
+                if (upgradeId is < 0 or > 13)
                     return NotFound("Upgrade not found");
 
                 _context.Upgrades.Add(new Upgrade

@@ -559,14 +559,15 @@ class SeedRandom {
 }
 
 let builder;
+let buildingsData;
 async function init() {
   const response = await fetch("data/buildings.json");
-  const buildings = await response.json();
+  buildingsData = await response.json();
   const width = (CITY_RADIUS * 2 + 1) * (CHUNK_WIDTH + 1) + BOUNDS_SIZE * 2 + 1;
   const height = (CITY_RADIUS * 2 + 1) * (CHUNK_HEIGHT + 1) + BOUNDS_SIZE * 2 + 1;
   const engine = new GridEngine(width, height);
   const renderer = new CityRenderer(engine, Math.floor(width / 2) - Math.ceil((CHUNK_WIDTH + 1) / 2), Math.floor(height / 2) - Math.ceil((CHUNK_HEIGHT + 1) / 2));
-  builder = new CityBuilder(buildings, renderer, "sawer", CITY_RADIUS, BOUNDS_SIZE);
+  builder = new CityBuilder(buildingsData, renderer, "sawer", CITY_RADIUS, BOUNDS_SIZE);
   setInterval(() => {
     const rndId = 13 - Math.floor(Math.pow(Math.random() * Math.pow(14, 4), 1 / 4));
     builder.addBuilding(rndId);
