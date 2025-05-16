@@ -270,5 +270,6 @@
       "images/vegetation/tree_pine_01.png",
       "images/vegetation/tree_pine_02.png"
     ]
-  }
+  },
+  "grass": "images/floors/ground_grass.png"
 }

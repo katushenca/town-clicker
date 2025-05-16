@@ -1,3 +1,19 @@
+const CHUNK_WIDTH = 3;
+const CHUNK_HEIGHT = 2;
+const CITY_RADIUS = 2;
+const BOUNDS_SIZE = 3;
+
+const ZOOM_INITIAL_SCALE = 1;
+const ZOOM_MIN_SCALE = 0.75;
+const ZOOM_MAX_SCALE = 2.25;
+const ZOOM_FACTOR = 0.001;
+
+const LARGE_VEGETATIONS_DENSITY = 0.05;
+const SMALL_VEGETATIONS_DENSITY = 0.15;
+const LARGE_VEGETATIONS_SCALE = 0.6;
+const SMALL_VEGETATIONS_SCALE = 0.15;
+const BUILDINGS_SCALE = 0.75;
+
 class CityGenerator {
   constructor(seed, maxRadius) {
     this._seed = seed;
@@ -13,7 +29,7 @@ class CityGenerator {
       return null;
     }
     const [chunkGridX, chunkGridY] = chunk;
-    const [chunkX, chunkY, chunkW, chunkH] = [chunkGridX * 4 + 1, chunkGridY * 3 + 1, 3, 2];
+    const [chunkX, chunkY, chunkW, chunkH] = [chunkGridX * (CHUNK_WIDTH + 1) + 1, chunkGridY * (CHUNK_HEIGHT + 1) + 1, CHUNK_WIDTH, CHUNK_HEIGHT];
     const chunkRnd = new SeedRandom(`chunk$${chunkGridX}$${chunkGridY}$${this._seed}`);
     const buildings = [];
     for (let i = 0; i < chunkW; i++) {
@@ -103,7 +119,7 @@ class CityGenerator {
 }
 
 class CityBuilder {
-  constructor(buildingsData, renderer, seed, maxRadius = 2, boundsSize = 3) {
+  constructor(buildingsData, renderer, seed, maxRadius, boundsSize) {
     this._buildingsData = buildingsData;
     this._buildingsData.buildings = [...this._buildingsData.buildings].sort((a, b) => a.id - b.id);
     this._renderer = renderer;
@@ -134,7 +150,7 @@ class CityBuilder {
   }
 
   _placeGrass(x, y) {
-    this._renderer.placeSprite(x, y, "images/floors/ground_grass.png");
+    this._renderer.placeSprite(x, y, this._buildingsData.grass);
     const chunkX = Math.floor(x / this._vegitationsChunkSize);
     const chunkY = Math.floor(y / this._vegitationsChunkSize);
     if (!this._vegitationsChunks.has(`${chunkX}:${chunkY}`)) {
@@ -149,8 +165,8 @@ class CityBuilder {
 
   _generateVegetationsChunk(chunkX, chunkY) {
     const rnd = new SeedRandom(`vegetations$${chunkX}$${chunkY}$${this._seed}`);
-    const largeDensity = 0.05;
-    const smallDensity = 0.15;
+    const largeDensity = LARGE_VEGETATIONS_DENSITY;
+    const smallDensity = SMALL_VEGETATIONS_DENSITY;
     const density = largeDensity + smallDensity;
     const x = chunkX * this._vegitationsChunkSize;
     const y = chunkY * this._vegitationsChunkSize;
@@ -163,13 +179,13 @@ class CityBuilder {
           continue;
         }
         if (state < largeDensity) {
-          const scale = rnd.randFloat(0.5, 0.7);
+          const scale = rnd.randFloat(0.8, 1.2) * LARGE_VEGETATIONS_SCALE;
           const offsetX = rnd.randFloat(-3, 3);
           const offsetY = rnd.randFloat(-3, 3);
           this._vegetationsMap.set(`${x + i}:${y + j}`,
             [this._buildingsData.vegetations.large[Math.floor(state / density * largeCount)], scale, offsetX, offsetY]);
         } else {
-          const scale = rnd.randFloat(0.1, 0.2);
+          const scale = rnd.randFloat(0.8, 1.2) * SMALL_VEGETATIONS_SCALE;
           const offsetX = rnd.randFloat(-5, 9);
           const offsetY = rnd.randFloat(7, 21);
           this._vegetationsMap.set(`${x + i}:${y + j}`,
@@ -299,8 +315,8 @@ class CityBuilder {
       this._expandBounds(x, y);
       this._renderer.placeSprite(x, y, this._buildingsData.roads[spriteKey], 1, 0, 0, true);
     }
-    this._renderer.placeSprite(building.x, building.y, "images/floors/ground_grass.png", 1, 0, 0, true);
-    this._renderer.placeSprite(building.x, building.y, sprite, 0.75, 5, 4);
+    this._renderer.placeSprite(building.x, building.y, this._buildingsData.grass, 1, 0, 0, true);
+    this._renderer.placeSprite(building.x, building.y, sprite, BUILDINGS_SCALE, 5, 4);
   }
 
   addBuildings(...ids) {
@@ -374,7 +390,7 @@ class GridEngine {
     this._startY = 0;
     this._offsetX = 0;
     this._offsetY = 0;
-    this._scale = 1.25;
+    this._scale = ZOOM_INITIAL_SCALE;
     this.createGrid(height, width);
     this.addEvents();
     this.centerGrid();
@@ -428,12 +444,9 @@ class GridEngine {
       const gridY = (mouseY - this._offsetY) / this._scale;
 
       const delta = -e.deltaY;
-      const zoomFactor = 0.001;
-      const newScale = this._scale * (1 + delta * zoomFactor);
-
-      const minScale = 1.25;
-      const maxScale = 2;
-      this._scale = Math.max(minScale, Math.min(maxScale, newScale));
+      
+      const newScale = this._scale * (1 + delta * ZOOM_FACTOR);
+      this._scale = Math.max(ZOOM_MIN_SCALE, Math.min(ZOOM_MAX_SCALE, newScale));
 
       this._offsetX = mouseX - gridX * this._scale;
       this._offsetY = mouseY - gridY * this._scale;
@@ -549,15 +562,14 @@ let builder;
 async function init() {
   const response = await fetch("data/buildings.json");
   const buildings = await response.json();
-  const radius = 2;
-  const width = (radius * 2 + 1) * 4 + 7;
-  const height = (radius * 2 + 1) * 3 + 7;
+  const width = (CITY_RADIUS * 2 + 1) * (CHUNK_WIDTH + 1) + BOUNDS_SIZE * 2 + 1;
+  const height = (CITY_RADIUS * 2 + 1) * (CHUNK_HEIGHT + 1) + BOUNDS_SIZE * 2 + 1;
   const engine = new GridEngine(width, height);
-  const renderer = new CityRenderer(engine, Math.floor(width / 2) - 2, Math.floor(height / 2) - 2);
-  builder = new CityBuilder(buildings, renderer, "sawer", radius, 3);
+  const renderer = new CityRenderer(engine, Math.floor(width / 2) - Math.ceil((CHUNK_WIDTH + 1) / 2), Math.floor(height / 2) - Math.ceil((CHUNK_HEIGHT + 1) / 2));
+  builder = new CityBuilder(buildings, renderer, "sawer", CITY_RADIUS, BOUNDS_SIZE);
   setInterval(() => {
-    const rndId = 13 - Math.floor(Math.pow(Math.random() * Math.pow(14, 4), 0.25));
+    const rndId = 13 - Math.floor(Math.pow(Math.random() * Math.pow(14, 4), 1 / 4));
     builder.addBuilding(rndId);
-  }, 1000);
+  }, 10);
 }
 init();
