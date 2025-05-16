@@ -82,6 +82,12 @@ public class AccountController : Controller
             {
                 UserId = newUser.Id
             });
+            await _context.UsersStatistics.AddAsync(new UserStatistics()
+            {
+                UserId = newUser.Id,
+                Money = 0,
+                Clicks = 0
+            });
             await _context.SaveChangesAsync();
             return View("RegisterCompleted");
         }

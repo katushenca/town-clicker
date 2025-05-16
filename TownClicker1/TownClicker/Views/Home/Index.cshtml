@@ -33,7 +33,27 @@
             </span>
             <span class="resources-item">
                 <img class="resources-icon" src="images/click.png" alt="Clicks" width="24">
-                <span id="click-count">1000</span>
+                <span id="click-count">0</span>
+                @if (User.Identity is { IsAuthenticated: true })
+                {
+                    <script>
+                        async function loadBalance() {
+                            try {
+                                const clicks = document.getElementById('click-count');
+                                const response = await fetch('http://localhost:5045/api/Statistics/r');
+                                if (!response.ok) {
+                                    throw new Error('Ошибка HTTP: ' + response.status);
+                                }
+                                const money = await response.text();
+                                clicks.textContent = money;
+                            } catch (error) {
+                                console.error('Ошибка:', error);
+                            }
+                        }
+
+                        loadBalance();
+                    </script>
+                }
             </span>
         </div>
         <div class="progress-bar">
