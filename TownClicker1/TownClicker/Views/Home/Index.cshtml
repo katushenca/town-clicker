@@ -40,7 +40,7 @@
                         async function loadBalance() {
                             try {
                                 const clicks = document.getElementById('click-count');
-                                const response = await fetch('http://localhost:5045/api/Statistics/r');
+                                const response = await fetch('http://localhost:5045/api/Statistics');
                                 if (!response.ok) {
                                     throw new Error('Ошибка HTTP: ' + response.status);
                                 }
