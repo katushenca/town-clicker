@@ -19,23 +19,24 @@ public class StatisticsController : Controller
         _context = context;
     }
     
-    [HttpGet("{userName}")]
-    public async Task<IActionResult> GetStatistics(string userName)
+    [HttpGet]
+    public async Task<IActionResult> GetStatistics()
     {
         if (User.Identity is { IsAuthenticated: false })
             return Unauthorized();
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+        Console.WriteLine(User.Identity.Name);
         var userId = user.Id;
         var userStatistics = await _context.UsersStatistics.FirstAsync(s => s.UserId == userId);
         return Ok(userStatistics.Clicks);
     }
     
-    [HttpPost("{userName}")]
-    public async Task<IActionResult> UpdateStatistics(string userName, [FromBody] BalanceUpdateRequest request)
+    [HttpPost]
+    public async Task<IActionResult> UpdateStatistics([FromBody] BalanceUpdateRequest request)
     {
         if (User.Identity is { IsAuthenticated: false })
             return Unauthorized();
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
         var userId = user.Id;
         var userStatistics = await _context.UsersStatistics.FirstAsync(s => s.UserId == userId);
         userStatistics.Clicks += request.AmountChange;

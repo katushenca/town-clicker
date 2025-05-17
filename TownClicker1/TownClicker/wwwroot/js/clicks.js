@@ -15,14 +15,14 @@ async function loadBalance() {
 
 async function increaseBalance(diff) {
     try {
-        const curBalanceResponse = await fetch('http://localhost:5045/api/Statistics/r');
+        const curBalanceResponse = await fetch(`http://localhost:5045/api/Statistics`);
         if (!curBalanceResponse.ok) {
             throw new Error('Ошибка HTTP: ' + curBalanceResponse.status);
         }
         const data = {
             AmountChange: diff,
         };
-        const incBalanceResponse = await fetch('http://localhost:5045/api/Statistics/r',
+        const incBalanceResponse = await fetch('http://localhost:5045/api/Statistics',
             {
                 method: 'POST',
                 headers: {
