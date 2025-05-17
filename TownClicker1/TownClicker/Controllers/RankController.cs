@@ -27,7 +27,7 @@ public class RankController : ControllerBase
         var statistics = await _context.UsersStatistics.FirstAsync(i => i.UserId == userId);
         return Ok(new
         {
-            statistics.UserId,
+            userName,
             statistics.Money,
             statistics.Clicks
         });
@@ -41,7 +41,7 @@ public class RankController : ControllerBase
             .Take(10)
             .Select(stat => new
             {
-                id = stat.UserId,
+                username = stat.User.UserName,
                 data = stat.Money,
             })
             .ToListAsync();
@@ -56,7 +56,7 @@ public class RankController : ControllerBase
             .Take(10)
             .Select(stat => new
             {
-                id = stat.UserId,
+                username = stat.User.UserName,
                 data = stat.Clicks
             })
             .ToListAsync();

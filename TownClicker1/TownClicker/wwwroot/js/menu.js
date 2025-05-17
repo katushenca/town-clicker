@@ -99,7 +99,7 @@ async function loadRank(userName, type='money') {
     placeCell.textContent = index + 1;
     row.appendChild(placeCell);
     const nameCell = document.createElement('td');
-    nameCell.textContent = item.id;
+    nameCell.textContent = item.username;
     row.appendChild(nameCell);
     const dataCell = document.createElement('td');
     dataCell.textContent = item.data;
