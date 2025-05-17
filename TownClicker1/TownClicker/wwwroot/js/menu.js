@@ -37,4 +37,5 @@ async function buyBuilding(id) {
   const buildingLevel = document.getElementById(`building-level-${id}`);
   const currentLevel = parseInt(buildingLevel.textContent.split(": ")[1]);
   buildingLevel.textContent = `Level: ${currentLevel + 1}`;
+  builder.addBuilding(id);
 }

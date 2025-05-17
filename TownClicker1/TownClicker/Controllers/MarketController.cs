@@ -20,7 +20,7 @@ public class MarketController(ApplicationDbContext context, UserManager<User> us
         return Ok(_context.UsersUpgrades.Where(u => u.UserId == userId)
             .Select(uu => new
             {
-                uu.UpgradeId,
+                UpgradeId = uu.UpgradeId - 1,
                 uu.Level
             }));
     }
@@ -29,15 +29,15 @@ public class MarketController(ApplicationDbContext context, UserManager<User> us
     public IActionResult MarketUpgrade(int upgradeId)
     {
         // TODO: ensure?
+        if (upgradeId is < 0 or > 13)
+            return NotFound("Upgrade not found");
+        upgradeId++;
         var userId = _userManager.GetUserId(User)!;
         var upgrade = _context.UsersUpgrades.FirstOrDefault(u => u.UserId == userId && u.UpgradeId == upgradeId);
         if (upgrade == null)
         {
             if (!_context.Upgrades.Any(u => u.Id == upgradeId))
             {
-                if (upgradeId is < 0 or > 13)
-                    return NotFound("Upgrade not found");
-
                 _context.Upgrades.Add(new Upgrade
                 {
                     Id = upgradeId,

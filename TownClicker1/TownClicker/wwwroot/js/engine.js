@@ -567,10 +567,16 @@ async function init() {
   const height = (CITY_RADIUS * 2 + 1) * (CHUNK_HEIGHT + 1) + BOUNDS_SIZE * 2 + 1;
   const engine = new GridEngine(width, height);
   const renderer = new CityRenderer(engine, Math.floor(width / 2) - Math.ceil((CHUNK_WIDTH + 1) / 2), Math.floor(height / 2) - Math.ceil((CHUNK_HEIGHT + 1) / 2));
-  builder = new CityBuilder(buildingsData, renderer, "sawer", CITY_RADIUS, BOUNDS_SIZE);
-  setInterval(() => {
+  builder = new CityBuilder(buildingsData, renderer, "USERNAME", CITY_RADIUS, BOUNDS_SIZE);
+  const levels = await (await fetch("market")).json();
+  for (const { upgradeId, level } of levels) {
+    for (let i = 0; i < level; i++) {
+      builder.addBuilding(upgradeId);
+    }
+  }
+  /*setInterval(() => {
     const rndId = 13 - Math.floor(Math.pow(Math.random() * Math.pow(14, 4), 1 / 4));
     builder.addBuilding(rndId);
-  }, 10);
+  }, 10);*/
 }
 init();
