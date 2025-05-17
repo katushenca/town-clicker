@@ -73,7 +73,7 @@
     <button class="click-button">ТЫК</button>
     <div class="footer-right">
         <div class="footer-row">
-            <img class="menu-icon" src="images/rank.png" alt="Rank" onclick="openMenu('rank')">
+            <img class="menu-icon" src="images/rank.png" alt="Rank" onclick="openMenu('Рейтинг', '@User.Identity.Name')">
         </div>
     </div>
 </footer>
@@ -84,6 +84,7 @@
         <h2 class="menu-title" id="menu-title-text">Menu</h2>
         <div id="menu-content">
             <div id="inventory-grid" style="display: none;"></div>
+            <table id="rating-table" style="display: none;"></table>
         </div>
     </div>
 </div>

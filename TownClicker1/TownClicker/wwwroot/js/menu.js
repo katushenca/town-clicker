@@ -5,13 +5,19 @@ async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
   menuOverlay.style.display = 'flex';
   const grid = document.getElementById('inventory-grid');
+  const rankTable = document.getElementById('rating-table');
   
   if (id === 'Инвентарь') {
     grid.style.display = 'flex';
     await loadInventory(userName);
+  } else if (id === 'Рейтинг') {
+    rankTable.style.display = 'flex';
+    await loadRank(userName);
   } else {
     grid.style.display = 'none';
     grid.innerHTML = '';
+    rankTable.style.display = 'none';
+    rankTable.innerHTML = '';
   }
 }
 
@@ -37,6 +43,40 @@ async function loadInventory(userName) {
     grid.appendChild(div);
   });
   await animateItems()
+}
+
+async function loadRank(userName, type='money') {
+  const response = await fetch(`/api/rank/statistics/${type}`);
+  const items = await response.json();
+  const table = document.getElementById('rating-table');
+  table.innerHTML = '';
+  
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  const headers = ['Место', 'Имя', type === 'money' ? 'Деньги' : 'Клики'];
+  headers.forEach(headerText => {
+    const th = document.createElement('th');
+    th.textContent = headerText;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+  
+  const tbody = document.createElement('tbody');
+  items.forEach((item, index) => {
+    const row = document.createElement('tr');
+    const placeCell = document.createElement('td');
+    placeCell.textContent = index + 1;
+    row.appendChild(placeCell);
+    const nameCell = document.createElement('td');
+    nameCell.textContent = item.id;
+    row.appendChild(nameCell);
+    const dataCell = document.createElement('td');
+    dataCell.textContent = item.data;
+    row.appendChild(dataCell);
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
 }
 
 async function animateItems(){
