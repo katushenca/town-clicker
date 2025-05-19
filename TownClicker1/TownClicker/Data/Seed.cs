@@ -102,36 +102,6 @@ public class Seed
                     });
                     context.SaveChanges();
                 }
-                
-                if (!context.Upgrades.Any())
-                {
-                    context.Upgrades.AddRange(new List<Upgrade>()
-                    {
-                        new Upgrade { Id = 1, Name = "Новичок", Description = "самый маленький" },
-                        new Upgrade { Id = 2, Name = "Профессионал", Description = "хорооош" },
-                        new Upgrade { Id = 3, Name = "Бог", Description = "мастер игры" }
-                    });
-                    context.SaveChanges();
-                }
-                
-                if (!context.UsersUpgrades.Any())
-                {
-                    var existingUserIds = context.Users.Select(u => u.Id).ToList();
-                    var existingUpgradeIds = context.Upgrades.Select(u => u.Id).ToList();
-    
-                    context.UsersUpgrades.AddRange(new List<UserUpgrades>()
-                    {
-                        new UserUpgrades { UserId = "d79fd03d-5cac-4d65-bf28-220ee823f954", UpgradeId = 1, Level = 5 },
-                        new UserUpgrades { UserId = "7431b356-281c-485e-a63f-f7f1b856ac3c", UpgradeId = 2, Level = 6 }
-                    }.Where(u => 
-                        existingUpgradeIds.Contains(u.UpgradeId))
-                            .ToList());
-    
-                    context.SaveChanges();
-                }
-                
-                
-
             }
         }
     

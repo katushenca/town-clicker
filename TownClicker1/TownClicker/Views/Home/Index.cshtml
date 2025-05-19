@@ -83,7 +83,7 @@
 <footer>
     <div class="footer-left">
         <div class="footer-row">
-            <img class="menu-icon" src="images/shop.png" alt="Shop" onclick="openMenu('shop')">
+            <img class="menu-icon" src="images/shop.png" alt="Shop" onclick="openMenu('Магазин')">
         </div>
         <div class="footer-row">
             <img class="menu-icon" src="images/chest.png" alt="Chest" onclick="openMenu('Инвентарь', '@User.Identity.Name')">
@@ -109,7 +109,22 @@
     </div>
 </div>
 
-
+<template id="market-item-template">
+    <div class="market-item">
+        <div class="market-item-level">Уровень <span class="market-item-level-value"></span></div>
+        <div class="market-item-img-container">
+            <img class="market-item-img">
+        </div>
+        <div class="market-item-cost-value"></div>
+        <div class="market-item-info">
+            +<span class="market-item-info-current-value"></span>
+            <span class="market-item-info-next">
+                -&gt;
+                +<span class="market-item-info-next-value"></span>
+            </span>
+        </div>
+    </div>
+</template>
 
 <script src="js/menu.js"></script>
 <script src="js/engine.js"></script>

@@ -8,7 +8,7 @@ async function openMenu(id, userName=null) {
   menuOverlay.style.display = 'flex';
   const grid = document.getElementById('inventory-grid');
   const rankTable = document.getElementById('rating-table');
-  if (id === 'shop')
+  if (id === 'Магазин')
     await marketMenu();
   else if (id === 'Инвентарь') {
     grid.style.display = 'flex';
@@ -29,30 +29,68 @@ function closeMenu() {
   menuContent.innerHTML = '';
 }
 
+let marketItemLevels;
 async function marketMenu() {
-  const buildings = [...buildingsData.buildings].sort((a, b) => a.initialCost - b.initialCost);
+  const buildings = [...buildingsData].sort((a, b) => a.initialCost - b.initialCost);
   const levels = await (await fetch("market")).json();
-  const buildingsList = document.createElement("div");
+  marketItemLevels = levels.reduce((acc, item) => {
+    acc[item.upgradeId] = item.level;
+    return acc;
+  }, {});
+  const container = document.createElement("div");
+  container.classList.add('market-list');
+  const template = document.getElementById('market-item-template');
   for (const building of buildings) {
-    const buildingDiv = document.createElement("div");
-    buildingDiv.innerHTML = `
-      <h3>${building.id}</h3>
-      <p id="building-level-${building.id}">Level: ${levels.find(l => l.upgradeId === building.id)?.level || 0}</p>
-      <button onclick="buyBuilding('${building.id}')">Buy</button>
-    `;
-    buildingsList.appendChild(buildingDiv);
+    const level = marketItemLevels[building.id] || 0;
+    const item = template.content.cloneNode(true).querySelector('.market-item');
+    item.id = `market-item-${building.id}`;
+    item.querySelector('.market-item-level-value').textContent = level;
+    item.querySelector('.market-item-img').src = buildingsTextures.buildings[building.id].left[0];
+    item.querySelector('.market-item-img').alt = building.name;
+    item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
+    item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
+    item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
+    item.addEventListener('click', () => buyBuilding(building.id));
+    container.appendChild(item);
   };
-  menuContent.appendChild(buildingsList);
+  menuContent.appendChild(container);
 }
 
 async function buyBuilding(id) {
-  await fetch(`market?upgradeId=${id}`, {
+  const response = await fetch(`market?upgradeId=${id}`, {
     method: "POST"
   });
-  const buildingLevel = document.getElementById(`building-level-${id}`);
-  const currentLevel = parseInt(buildingLevel.textContent.split(": ")[1]);
-  buildingLevel.textContent = `Level: ${currentLevel + 1}`;
-  builder.addBuilding(id);
+  if (response.ok) {
+    const building = buildingsData.find(b => b.id === id);
+    const level = (marketItemLevels[id] || 0) + 1;
+    marketItemLevels[id] = level;
+    const item = document.getElementById(`market-item-${id}`);
+    item.querySelector('.market-item-level-value').textContent = level;
+    item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
+    item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
+    item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
+    builder.addBuilding(id);
+    console.log("Now popularity:", (await response.json()).popularity);
+  }
+}
+
+function calcCost(building, level) {
+  const initialCost = building.initialCost;
+  const costMultiplier = building.costMultiplier;
+  const cost = Math.floor(initialCost * Math.pow(costMultiplier, level));
+  return cost;
+}
+
+function calcEffect(building, level) {
+  const effectType = building.effectType;
+  const effectValue = building.effectValue;
+  const effect = effectValue * level;
+  switch (effectType) {
+    case 'Flat':
+      return Math.floor(effect).toString();
+    case 'Mult':
+      return Math.floor(effect * 100).toString() + '%';
+  }
 }
 
 async function loadInventory(userName) {

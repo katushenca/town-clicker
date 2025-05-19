@@ -8,6 +8,7 @@ public class UserStatistics
     public string UserId { get; set; }
     public long Money { get; set; }
     public long Clicks { get; set; }
-    
+    public long Popularity { get; set; }
+
     public User User { get; set; }
 }
