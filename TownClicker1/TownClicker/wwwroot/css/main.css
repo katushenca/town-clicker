@@ -119,21 +119,27 @@ footer {
 }
 
 .click-button {
-  width: 500px;
-  height: 200px;
-  margin: 10px;
+  width: 300px;
+  height: 120px;
+  margin: 20px auto;
   border: none;
-  border-radius: 50%;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 32px;
+  border-radius: 60px;
+  background: linear-gradient(#f39c12, #e67e22);
+  color: #fffbe6;
+  font-size: 40px;
+  font-family: 'Verdana', sans-serif;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   pointer-events: auto;
+  box-shadow: 0 8px 0 #c56217, 0 12px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
 
+
+
 .click-button:hover {
-  background-color: #45a049;
+  transform: scale(1.05);
+  box-shadow: 0 10px 0 #eab709, 0 14px 24px rgb(250, 169, 8);
 }
 
 
