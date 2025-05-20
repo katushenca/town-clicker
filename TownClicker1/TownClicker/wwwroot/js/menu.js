@@ -66,7 +66,9 @@ async function buyBuilding(id) {
     item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
     item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
     builder.addBuilding(id);
-    console.log("Now popularity:", (await response.json()).popularity);
+    const json = await response.json();
+    document.getElementById('coin-count').textContent = json.money;
+    document.getElementById('click-count').textContent = json.popularity;
   }
 }
 
