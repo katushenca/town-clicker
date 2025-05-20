@@ -26,12 +26,9 @@
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('get-upgrade-btn');
-    const status = document.getElementById('upgrade-status');
-    if (!btn || !status) return;
-    btn.addEventListener('click', async () => {
-        btn.disabled = true;
+    async function requestUpgrade() {
         const result = await UpgradeService.getUpgrade();
-        btn.disabled = false;
-    });
+    }
+    requestUpgrade();
+    setInterval(requestUpgrade, 60 * 1000);
 });

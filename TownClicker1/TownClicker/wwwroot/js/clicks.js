@@ -42,7 +42,38 @@ async function increaseBalance(diff) {
 }
 
 async function handleClick() {
-    await increaseBalance(1);
+    const response = await fetch(`/api/upgrade/status`);
+    const items = await response.json();
+    console.log(items);
+    if (items.isActive === true && items.id === 1)
+        await increaseBalance(2);
+    else
+        await increaseBalance(1);
 }
-
+let autoClickerActive = false;
+let autoClickerTimer = null;
+let autoClickerEnd = null;
+async function checkAutoClicker() {
+    try {
+        const response = await fetch(`/api/upgrade/status`);
+        const items = await response.json();
+        if (items.isActive === true && items.id === 2 && !autoClickerActive) {
+            autoClickerActive = true;
+            autoClickerEnd = Date.now() + 60;
+            autoClickerTimer = setInterval(() => {
+                if (Date.now() < autoClickerEnd) {
+                    increaseBalance(1);
+                } else {
+                    clearInterval(autoClickerTimer);
+                    autoClickerActive = false;
+                    autoClickerTimer = null;
+                }
+            }, 1000);
+        }
+    } catch (err) {
+        console.error('checkAutoClicker error:', err);
+    }
+}
 button.addEventListener("click", handleClick);
+setInterval(checkAutoClicker, 1000);
+
