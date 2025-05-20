@@ -11,10 +11,12 @@ namespace TownClicker.Controllers;
 public class InventoryController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly List<int> upgradeIds;
 
     public InventoryController(ApplicationDbContext context)
     {
         _context = context;
+        upgradeIds = new List<int>() { 1, 2 };
     }
 
     [HttpGet("{userName}")]
@@ -97,6 +99,49 @@ public class InventoryController : ControllerBase
             }
         }
         return Ok(new { isActive = false });
+    }
+
+    [HttpGet("/api/upgrade/get")]
+    public async Task<IActionResult> GetUpgrade()
+    {
+        var lastBoostTime = HttpContext.Session.GetString("LastBoostTime");
+        Console.WriteLine(lastBoostTime + " овфлв");
+        DateTime lastBoost;
+        if (!DateTime.TryParse(lastBoostTime, out lastBoost))
+        {
+            lastBoost = DateTime.UtcNow;
+        }
+        if ((DateTime.UtcNow - lastBoost).TotalMinutes >= 1)
+        {
+            var upgradesCount = upgradeIds.Count;
+            var random = new Random();
+            var randomIndex = random.Next(0, upgradesCount);
+            var upgrade = upgradeIds[randomIndex];
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            var userId = user.Id;
+            var inventory = await _context.Inventories.FirstAsync(i => i.UserId == userId);
+            var inventoryId = inventory.Id;
+            var currentUpgrade = _context.InventorySkins.FindAsync(inventoryId, upgrade);
+            if (currentUpgrade == null || currentUpgrade.Result == null)
+            {
+                _context.InventorySkins.Add(new InventorySkin()
+                {
+                    isImprovement = true,
+                    inventoryId = inventoryId,
+                    skinId = upgrade
+                });
+            }
+            else
+            {
+                currentUpgrade.Result.isImprovementUsed = false;
+                currentUpgrade.Result.EndsAt = DateTime.UtcNow.AddSeconds(60);
+                _context.InventorySkins.Update(currentUpgrade.Result);
+            }
+            HttpContext.Session.SetString("LastBoostTime", DateTime.UtcNow.ToString());
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        return BadRequest();
     }
 }
 
