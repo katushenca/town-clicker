@@ -24,10 +24,13 @@ public class InventoryController : ControllerBase
     {
         if (User.Identity is { IsAuthenticated: false })
             return Unauthorized();
+        Console.WriteLine("лалла 1");
         var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
         var userId = user.Id;
+        Console.WriteLine("лалла 2" + userId);
         var inventory = await _context.Inventories.FirstAsync(i => i.UserId == userId);
         var inventoryId = inventory.Id;
+        Console.WriteLine("инвентарь ид" + inventoryId);
         var items = await _context.InventorySkins
             .Where(i => i.inventoryId == inventoryId && i.isImprovement && !i.isImprovementUsed).Join(_context.Skins, 
                 i => i.skinId, s => s.Id, (i, s) =>
@@ -37,6 +40,7 @@ public class InventoryController : ControllerBase
                 Url = s.ImageUrl
             })
             .ToListAsync();
+        Console.WriteLine(items.Count);
         return Ok(items);
     }
 
@@ -130,14 +134,17 @@ public class InventoryController : ControllerBase
                     inventoryId = inventoryId,
                     skinId = upgrade
                 });
+                HttpContext.Session.SetString("LastBoostTime", DateTime.UtcNow.ToString());
             }
             else
             {
+                if (!currentUpgrade.Result.isImprovementUsed)
+                    HttpContext.Session.SetString("LastBoostTime", DateTime.UtcNow.ToString());
                 currentUpgrade.Result.isImprovementUsed = false;
                 currentUpgrade.Result.EndsAt = DateTime.UtcNow.AddSeconds(60);
                 _context.InventorySkins.Update(currentUpgrade.Result);
             }
-            HttpContext.Session.SetString("LastBoostTime", DateTime.UtcNow.ToString());
+            
             await _context.SaveChangesAsync();
             return Ok();
         }

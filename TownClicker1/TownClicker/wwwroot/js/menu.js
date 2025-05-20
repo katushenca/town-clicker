@@ -92,6 +92,7 @@ function calcEffect(building, level) {
 async function loadInventory(userName) {
   const response = await fetch(`/api/inventory/${userName}`);
   const items = await response.json();
+  console.log(items)
   const grid = document.getElementById('inventory-grid');
   grid.innerHTML = '';
   items.forEach(item => {
