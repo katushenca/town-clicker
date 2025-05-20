@@ -12,7 +12,7 @@ async function openMenu(id, userName=null) {
     document.getElementById('inventory-grid').style.display = 'flex';
     await loadInventory(userName);
   } else if (id === 'Рейтинг') {
-    document.getElementById('rating-table').style.display = 'flex';
+    document.getElementById('rating-table').style.display = 'block';
     await loadRank(userName);
   }
 }
@@ -85,7 +85,6 @@ async function loadRank(userName, type='money') {
   });
   thead.appendChild(headerRow);
   table.appendChild(thead);
-  
   const tbody = document.createElement('tbody');
   items.forEach((item, index) => {
     const row = document.createElement('tr');
