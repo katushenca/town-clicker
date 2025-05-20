@@ -40,6 +40,7 @@ public class AccountController : Controller
                 var result = await signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
                 if (result.Succeeded)
                 {
+                    HttpContext.Session.SetString("LastBoostTime", DateTime.Now.ToString());
                     return RedirectToAction("Index", "Home");   
                 }
             }

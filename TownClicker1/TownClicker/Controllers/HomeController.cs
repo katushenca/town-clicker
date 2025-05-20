@@ -15,6 +15,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        if (HttpContext.Session.GetString("LastBoostTime") == null)
+            HttpContext.Session.SetString("LastBoostTime", DateTime.UtcNow.ToString());
         return View();
     }
 }
