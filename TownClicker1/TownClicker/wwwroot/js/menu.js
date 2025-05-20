@@ -6,27 +6,21 @@ const menuContent = document.getElementById("menu-content");
 async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
   menuOverlay.style.display = 'flex';
-  const grid = document.getElementById('inventory-grid');
-  const rankTable = document.getElementById('rating-table');
   if (id === 'shop')
     await marketMenu();
   else if (id === 'Инвентарь') {
-    grid.style.display = 'flex';
+    document.getElementById('inventory-grid').style.display = 'flex';
     await loadInventory(userName);
   } else if (id === 'Рейтинг') {
-    rankTable.style.display = 'flex';
+    document.getElementById('rating-table').style.display = 'flex';
     await loadRank(userName);
-  } else {
-    grid.style.display = 'none';
-    grid.innerHTML = '';
-    rankTable.style.display = 'none';
-    rankTable.innerHTML = '';
   }
 }
 
 function closeMenu() {
   menuOverlay.style.display = 'none';
-  menuContent.innerHTML = '';
+  document.getElementById('inventory-grid').innerHTML = '';
+  document.getElementById('rating-table').innerHTML = '';
 }
 
 async function marketMenu() {
