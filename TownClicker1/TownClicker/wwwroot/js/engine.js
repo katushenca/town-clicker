@@ -119,9 +119,9 @@ class CityGenerator {
 }
 
 class CityBuilder {
-  constructor(buildingsData, renderer, seed, maxRadius, boundsSize) {
+  constructor(buildingsData, buildingsTextures, renderer, seed, maxRadius, boundsSize) {
     this._buildingsData = buildingsData;
-    this._buildingsData.buildings = [...this._buildingsData.buildings].sort((a, b) => a.id - b.id);
+    this._buildingsTextures = buildingsTextures;
     this._renderer = renderer;
     this._seed = seed;
     this._chunkRandomizer = new CityGenerator(this._seed, maxRadius);
@@ -137,9 +137,9 @@ class CityBuilder {
     this._vegitationsChunks = new Set();
     this._vegetationsMap = new Map();
 
-    for (const building of this._buildingsData.buildings) {
+    for (const building of this._buildingsData) {
       this._buildQueues[building.id] = [];
-      this._buildingCosts.push({ cost: building.initialCost, mult: building.costMultiplierPerLevel, id: building.id });
+      this._buildingCosts.push({ cost: building.initialCost, mult: building.costMultiplier, id: building.id });
     }
 
     for (let i = -boundsSize; i <= boundsSize; i++) {
@@ -150,7 +150,7 @@ class CityBuilder {
   }
 
   _placeGrass(x, y) {
-    this._renderer.placeSprite(x, y, this._buildingsData.grass);
+    this._renderer.placeSprite(x, y, this._buildingsTextures.grass);
     const chunkX = Math.floor(x / this._vegitationsChunkSize);
     const chunkY = Math.floor(y / this._vegitationsChunkSize);
     if (!this._vegitationsChunks.has(`${chunkX}:${chunkY}`)) {
@@ -170,8 +170,8 @@ class CityBuilder {
     const density = largeDensity + smallDensity;
     const x = chunkX * this._vegitationsChunkSize;
     const y = chunkY * this._vegitationsChunkSize;
-    const smallCount = this._buildingsData.vegetations.small.length;
-    const largeCount = this._buildingsData.vegetations.large.length;
+    const smallCount = this._buildingsTextures.vegetations.small.length;
+    const largeCount = this._buildingsTextures.vegetations.large.length;
     for (let i = 0; i < this._vegitationsChunkSize; i++) {
       for (let j = 0; j < this._vegitationsChunkSize; j++) {
         const state = rnd.random();
@@ -183,13 +183,13 @@ class CityBuilder {
           const offsetX = rnd.randFloat(-3, 3);
           const offsetY = rnd.randFloat(-3, 3);
           this._vegetationsMap.set(`${x + i}:${y + j}`,
-            [this._buildingsData.vegetations.large[Math.floor(state / density * largeCount)], scale, offsetX, offsetY]);
+            [this._buildingsTextures.vegetations.large[Math.floor(state / density * largeCount)], scale, offsetX, offsetY]);
         } else {
           const scale = rnd.randFloat(0.8, 1.2) * SMALL_VEGETATIONS_SCALE;
           const offsetX = rnd.randFloat(-5, 9);
           const offsetY = rnd.randFloat(7, 21);
           this._vegetationsMap.set(`${x + i}:${y + j}`,
-            [this._buildingsData.vegetations.small[Math.floor(state / density * smallCount)], scale, offsetX, offsetY]);
+            [this._buildingsTextures.vegetations.small[Math.floor(state / density * smallCount)], scale, offsetX, offsetY]);
         }
       }
     }
@@ -288,7 +288,7 @@ class CityBuilder {
       }
     }
     const building = this._buildQueues[id].shift();
-    const textures = this._buildingsData.buildings[id].textures[building.side];
+    const textures = this._buildingsTextures.buildings[id][building.side];
     const sprite = textures[Math.floor(building.state * textures.length)];
     const roads = this._addRoadPath(building.road);
     const roadsToUpdateSet = new Set();
@@ -313,9 +313,9 @@ class CityBuilder {
       const [x, y] = roadCell;
       const spriteKey = `${Number(this._roadTiles.has(`${x - 1}:${y}`))}${Number(this._roadTiles.has(`${x}:${y + 1}`))}${Number(this._roadTiles.has(`${x + 1}:${y}`))}${Number(this._roadTiles.has(`${x}:${y - 1}`))}`;
       this._expandBounds(x, y);
-      this._renderer.placeSprite(x, y, this._buildingsData.roads[spriteKey], 1, 0, 0, true);
+      this._renderer.placeSprite(x, y, this._buildingsTextures.roads[spriteKey], 1, 0, 0, true);
     }
-    this._renderer.placeSprite(building.x, building.y, this._buildingsData.grass, 1, 0, 0, true);
+    this._renderer.placeSprite(building.x, building.y, this._buildingsTextures.grass, 1, 0, 0, true);
     this._renderer.placeSprite(building.x, building.y, sprite, BUILDINGS_SCALE, 5, 4);
   }
 
@@ -560,14 +560,16 @@ class SeedRandom {
 
 let builder;
 let buildingsData;
+let buildingsTextures;
 async function init() {
-  const response = await fetch("data/buildings.json");
-  buildingsData = await response.json();
+  buildingsData = await (await fetch("market/upgrades")).json();
+  buildingsData = [...buildingsData].sort((a, b) => a.id - b.id);
+  buildingsTextures = await (await fetch("data/buildings.json")).json();
   const width = (CITY_RADIUS * 2 + 1) * (CHUNK_WIDTH + 1) + BOUNDS_SIZE * 2 + 1;
   const height = (CITY_RADIUS * 2 + 1) * (CHUNK_HEIGHT + 1) + BOUNDS_SIZE * 2 + 1;
   const engine = new GridEngine(width, height);
   const renderer = new CityRenderer(engine, Math.floor(width / 2) - Math.ceil((CHUNK_WIDTH + 1) / 2), Math.floor(height / 2) - Math.ceil((CHUNK_HEIGHT + 1) / 2));
-  builder = new CityBuilder(buildingsData, renderer, "USERNAME", CITY_RADIUS, BOUNDS_SIZE);
+  builder = new CityBuilder(buildingsData, buildingsTextures, renderer, "SEED", CITY_RADIUS, BOUNDS_SIZE);
   const levels = await (await fetch("market")).json();
   for (const { upgradeId, level } of levels) {
     for (let i = 0; i < level; i++) {

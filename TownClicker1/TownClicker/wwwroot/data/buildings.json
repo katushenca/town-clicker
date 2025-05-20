@@ -1,240 +1,142 @@
 {
-  "buildings": [
-    {
-      "id": 0,
-      "initialCost": 25,
-      "costMultiplierPerLevel": 1.5,
-      "effectType": "flat",
-      "populationPerLevel": 1,
-      "textures": {
-        "left": [
-          "images/buildings/house_small_blue_a.png",
-          "images/buildings/house_small_purple_a.png",
-          "images/buildings/house_small_yellow_a.png"
-        ],
-        "right": [
-          "images/buildings/house_small_blue_b.png",
-          "images/buildings/house_small_purple_b.png",
-          "images/buildings/house_small_yellow_b.png"
-        ]
-      }
+  "buildings": {
+    "1": {
+      "left": [
+        "images/buildings/house_small_blue_a.png",
+        "images/buildings/house_small_purple_a.png",
+        "images/buildings/house_small_yellow_a.png"
+      ],
+      "right": [
+        "images/buildings/house_small_blue_b.png",
+        "images/buildings/house_small_purple_b.png",
+        "images/buildings/house_small_yellow_b.png"
+      ]
     },
-    {
-      "id": 1,
-      "initialCost": 500,
-      "costMultiplierPerLevel": 1.5,
-      "effectType": "flat",
-      "populationPerLevel": 5,
-      "textures": {
-        "left": [
-          "images/buildings/house_medium_brown_a.png",
-          "images/buildings/house_medium_gray_a.png",
-          "images/buildings/house_medium_white_a.png"
-        ],
-        "right": [
-          "images/buildings/house_medium_brown_b.png",
-          "images/buildings/house_medium_gray_b.png",
-          "images/buildings/house_medium_white_b.png"
-        ]
-      }
+    "2": {
+      "left": [
+        "images/buildings/house_medium_brown_a.png",
+        "images/buildings/house_medium_gray_a.png",
+        "images/buildings/house_medium_white_a.png"
+      ],
+      "right": [
+        "images/buildings/house_medium_brown_b.png",
+        "images/buildings/house_medium_gray_b.png",
+        "images/buildings/house_medium_white_b.png"
+      ]
     },
-    {
-      "id": 2,
-      "initialCost": 20000,
-      "costMultiplierPerLevel": 1.5,
-      "effectType": "flat",
-      "populationPerLevel": 8,
-      "textures": {
-        "left": [
-          "images/buildings/house_large_brown_a.png",
-          "images/buildings/house_large_green_a.png",
-          "images/buildings/house_large_teal_a.png"
-        ],
-        "right": [
-          "images/buildings/house_large_brown_b.png",
-          "images/buildings/house_large_green_b.png",
-          "images/buildings/house_large_teal_b.png"
-        ]
-      }
+    "3": {
+      "left": [
+        "images/buildings/house_large_brown_a.png",
+        "images/buildings/house_large_green_a.png",
+        "images/buildings/house_large_teal_a.png"
+      ],
+      "right": [
+        "images/buildings/house_large_brown_b.png",
+        "images/buildings/house_large_green_b.png",
+        "images/buildings/house_large_teal_b.png"
+      ]
     },
-    {
-      "id": 3,
-      "initialCost": 500000,
-      "costMultiplierPerLevel": 1.5,
-      "effectType": "flat",
-      "populationPerLevel": 32,
-      "textures": {
-        "left": [
-          "images/buildings/building_small_brown_a.png",
-          "images/buildings/building_small_gray_a.png",
-          "images/buildings/building_small_red_a.png"
-        ],
-        "right": [
-          "images/buildings/building_small_brown_b.png",
-          "images/buildings/building_small_gray_b.png",
-          "images/buildings/building_small_red_b.png"
-        ]
-      }
+    "4": {
+      "left": [
+        "images/buildings/building_small_brown_a.png",
+        "images/buildings/building_small_gray_a.png",
+        "images/buildings/building_small_red_a.png"
+      ],
+      "right": [
+        "images/buildings/building_small_brown_b.png",
+        "images/buildings/building_small_gray_b.png",
+        "images/buildings/building_small_red_b.png"
+      ]
     },
-    {
-      "id": 4,
-      "initialCost": 2000000,
-      "costMultiplierPerLevel": 1.5,
-      "effectType": "flat",
-      "populationPerLevel": 128,
-      "textures": {
-        "left": [
-          "images/buildings/building_medium_blue_a.png",
-          "images/buildings/building_medium_green_a.png",
-          "images/buildings/building_medium_white_a.png"
-        ],
-        "right": [
-          "images/buildings/building_medium_blue_b.png",
-          "images/buildings/building_medium_green_b.png",
-          "images/buildings/building_medium_white_b.png"
-        ]
-      }
+    "5": {
+      "left": [
+        "images/buildings/building_medium_blue_a.png",
+        "images/buildings/building_medium_green_a.png",
+        "images/buildings/building_medium_white_a.png"
+      ],
+      "right": [
+        "images/buildings/building_medium_blue_b.png",
+        "images/buildings/building_medium_green_b.png",
+        "images/buildings/building_medium_white_b.png"
+      ]
     },
-    {
-      "id": 5,
-      "initialCost": 50000000,
-      "costMultiplierPerLevel": 1.5,
-      "effectType": "flat",
-      "populationPerLevel": 512,
-      "textures": {
-        "left": [
-          "images/buildings/building_tall_blue_a.png",
-          "images/buildings/building_tall_yellow_a.png"
-        ],
-        "right": [
-          "images/buildings/building_tall_blue_b.png",
-          "images/buildings/building_tall_yellow_b.png"
-        ]
-      }
+    "6": {
+      "left": [
+        "images/buildings/building_tall_blue_a.png",
+        "images/buildings/building_tall_yellow_a.png"
+      ],
+      "right": [
+        "images/buildings/building_tall_blue_b.png",
+        "images/buildings/building_tall_yellow_b.png"
+      ]
     },
-    {
-      "id": 6,
-      "initialCost": 250,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.02,
-      "textures": {
-        "left": [
-          "images/buildings/cafe_a.png"
-        ],
-        "right": [
-          "images/buildings/cafe_b.png"
-        ]
-      }
+    "7": {
+      "left": [
+        "images/buildings/cafe_a.png"
+      ],
+      "right": [
+        "images/buildings/cafe_b.png"
+      ]
     },
-    {
-      "id": 7,
-      "initialCost": 10000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.03,
-      "textures": {
-        "left": [
-          "images/buildings/hospital_a.png"
-        ],
-        "right": [
-          "images/buildings/hospital_b.png"
-        ]
-      }
+    "8": {
+      "left": [
+        "images/buildings/hospital_a.png"
+      ],
+      "right": [
+        "images/buildings/hospital_b.png"
+      ]
     },
-    {
-      "id": 8,
-      "initialCost": 50000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.02,
-      "textures": {
-        "left": [
-          "images/buildings/auto_shop_a.png"
-        ],
-        "right": [
-          "images/buildings/auto_shop_b.png"
-        ]
-      }
+    "9": {
+      "left": [
+        "images/buildings/auto_shop_a.png"
+      ],
+      "right": [
+        "images/buildings/auto_shop_b.png"
+      ]
     },
-    {
-      "id": 9,
-      "initialCost": 750000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.03,
-      "textures": {
-        "left": [
-          "images/buildings/fire_station_a.png"
-        ],
-        "right": [
-          "images/buildings/fire_station_b.png"
-        ]
-      }
+    "10": {
+      "left": [
+        "images/buildings/fire_station_a.png"
+      ],
+      "right": [
+        "images/buildings/fire_station_b.png"
+      ]
     },
-    {
-      "id": 10,
-      "initialCost": 5000000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.04,
-      "textures": {
-        "left": [
-          "images/buildings/gas_station_a.png"
-        ],
-        "right": [
-          "images/buildings/gas_station_b.png"
-        ]
-      }
+    "11": {
+      "left": [
+        "images/buildings/gas_station_a.png"
+      ],
+      "right": [
+        "images/buildings/gas_station_b.png"
+      ]
     },
-    {
-      "id": 11,
-      "initialCost": 25000000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.02,
-      "textures": {
-        "left": [
-          "images/buildings/police_station_a.png"
-        ],
-        "right": [
-          "images/buildings/police_station_b.png"
-        ]
-      }
+    "12": {
+      "left": [
+        "images/buildings/police_station_a.png"
+      ],
+      "right": [
+        "images/buildings/police_station_b.png"
+      ]
     },
-    {
-      "id": 12,
-      "initialCost": 75000000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.05,
-      "textures": {
-        "left": [
-          "images/buildings/church_a.png"
-        ],
-        "right": [
-          "images/buildings/church_b.png"
-        ]
-      }
+    "13": {
+      "left": [
+        "images/buildings/church_a.png"
+      ],
+      "right": [
+        "images/buildings/church_b.png"
+      ]
     },
-    {
-      "id": 13,
-      "initialCost": 1000000000,
-      "costMultiplierPerLevel": 10,
-      "effectType": "mult",
-      "multiplierPerLevel": 0.1,
-      "textures": {
-        "left": [
-          "images/buildings/warehouse_maroon_a.png",
-          "images/buildings/warehouse_orange_a.png"
-        ],
-        "right": [
-          "images/buildings/warehouse_maroon_b.png",
-          "images/buildings/warehouse_orange_b.png"
-        ]
-      }
+    "14": {
+      "left": [
+        "images/buildings/warehouse_maroon_a.png",
+        "images/buildings/warehouse_orange_a.png"
+      ],
+      "right": [
+        "images/buildings/warehouse_maroon_b.png",
+        "images/buildings/warehouse_orange_b.png"
+      ]
     }
-  ],
+  },
   "roads": {
     "0000": "images/floors/road_xing.png",
     "0001": "images/floors/road_end_c.png",
