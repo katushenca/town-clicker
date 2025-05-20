@@ -30,22 +30,20 @@
             <span class="resources-item">
                 <img class="resources-icon" src="images/coin.png" alt="Coins" width="24">
                 <span id="coin-count">1000</span>
-            </span>
-            <span class="resources-item">
-                <img class="resources-icon" src="images/people.png" alt="Clicks" width="24">
-                <span id="click-count">0</span>
+                
                 @if (User.Identity is { IsAuthenticated: true })
                 {
                     <script>
                         async function loadBalance() {
                             try {
-                                const clicks = document.getElementById('click-count');
+                                const clicks = document.getElementById('coin-count');
                                 const response = await fetch('http://localhost:5045/api/Statistics');
                                 if (!response.ok) {
                                     throw new Error('Ошибка HTTP: ' + response.status);
                                 }
-                                const money = await response.text();
+                                const money = await (await response.json())['coins'];
                                 clicks.textContent = money;
+                                console.log('Init coins', money)
                             } catch (error) {
                                 console.error('Ошибка:', error);
                             }
@@ -54,6 +52,10 @@
                         loadBalance();
                     </script>
                 }
+            </span>
+            <span class="resources-item">
+                <img class="resources-icon" src="images/click.png" alt="Clicks" width="24">
+                <span id="click-count">0</span>
             </span>
         </div>
         <div class="progress-bar">
@@ -129,6 +131,7 @@
 <script src="js/engine.js"></script>
 <script src="js/clicks.js"></script>
 <script src="js/improvement.js"></script>
+<script src="js/click-money-logic.js"></script>
 </body>
 
 </html>
