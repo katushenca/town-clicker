@@ -316,7 +316,7 @@ class CityBuilder {
       this._renderer.placeSprite(x, y, this._buildingsTextures.roads[spriteKey], 1, 0, 0, true);
     }
     this._renderer.placeSprite(building.x, building.y, this._buildingsTextures.grass, 1, 0, 0, true);
-    this._renderer.placeSprite(building.x, building.y, sprite, BUILDINGS_SCALE, 5, 4);
+    this._renderer.placeSprite(building.x, building.y, sprite, BUILDINGS_SCALE, 5, 4, false, true);
   }
 
   addBuildings(...ids) {
@@ -343,8 +343,8 @@ class CityRenderer {
     });
   }
 
-  placeSprite(x, y, url, scale = 1, offsetX = 0, offsetY = 0, replace = false) {
-    this._engine.placeSprite(x + this._centerX, y + this._centerY, url, scale, offsetX, offsetY, replace);
+  placeSprite(x, y, url, scale = 1, offsetX = 0, offsetY = 0, replace = false, isBuilding=false) {
+    this._engine.placeSprite(x + this._centerX, y + this._centerY, url, scale, offsetX, offsetY, replace, isBuilding);
   }
 
   renderDebugCity() {
@@ -366,7 +366,7 @@ class CityRenderer {
       for (let j = 0; j < 12; j++) {
         if (i % 4 == 0) i++;
         if (j % 4 == 0) j++;
-        this._engine.placeSprite(39 + i, 39 + j, `images/buildings/${list[id++]}`, 0.75, 5, 4);
+        this._engine.placeSprite(39 + i, 39 + j, `images/buildings/${list[id++]}`, 0.75, 5, 4, false, true);
         if (id >= list.length)
           break a;
       }
@@ -464,7 +464,7 @@ class GridEngine {
     this.updateTransform();
   }
 
-  placeSprite(x, y, url, scale = 1, offsetX = 0, offsetY = 0, replace = false) {
+  placeSprite(x, y, url, scale = 1, offsetX = 0, offsetY = 0, replace = false, isBuilding = false) {
     const cell = this._cells[y]?.[x];
     if (!cell) {
       return;
@@ -474,6 +474,9 @@ class GridEngine {
     }
     let sprite = document.createElement("div");
     sprite.classList.add("sprite");
+    if (isBuilding) {
+      sprite.id = "building";
+    }
     sprite.style.backgroundImage = `url('${url}')`;
     sprite.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
     cell.appendChild(sprite);

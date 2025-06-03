@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TownClicker.Data;
@@ -51,10 +52,13 @@ public class InventoryController : ControllerBase
         var inventoryId = inventory.Id;
         var skin = await _context.Skins.FindAsync(SkinId);
         var duration = skin.DurationSeconds;
-        var currentImprovement = new InventorySkin(){inventoryId = inventoryId, skinId = SkinId};
-        _context.InventorySkins.Attach(currentImprovement);
-        _context.Entry(currentImprovement).Property(x => x.isImprovementUsed).CurrentValue = true;
-        _context.Entry(currentImprovement).Property(x => x.EndsAt).CurrentValue = DateTime.UtcNow.AddSeconds(duration);
+        var currentImprovement = await _context.InventorySkins
+            .FirstOrDefaultAsync(x => 
+                x.inventoryId == inventory.Id && 
+                x.skinId == SkinId && !x.isImprovementUsed);
+        
+        currentImprovement.isImprovementUsed = true;
+        currentImprovement.EndsAt = DateTime.UtcNow.AddSeconds(duration);
         var improvementData = await _context.Skins.FindAsync(SkinId);
         await _context.SaveChangesAsync();
         var json = JsonSerializer.Serialize(new ImprovementData
@@ -101,47 +105,30 @@ public class InventoryController : ControllerBase
         return Ok(new { isActive = false });
     }
 
-    [HttpGet("/api/upgrade/get")]
-    public async Task<IActionResult> GetUpgrade()
+    [HttpPost("/api/upgrade/add")]
+    [Authorize]
+    public async Task<IActionResult> AddUpgradeToInventory([FromBody] int skinId)
     {
-        var lastBoostTime = HttpContext.Session.GetString("LastBoostTime");
-        Console.WriteLine(lastBoostTime + " овфлв");
-        DateTime lastBoost;
-        if (!DateTime.TryParse(lastBoostTime, out lastBoost))
+        var username = User.Identity.Name;
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+        if (user == null)
+            return NotFound(new { success = false, error = "Пользователь не найден" });
+        var userId = user.Id;
+        var inventory = await _context.Inventories.FirstOrDefaultAsync(i => i.UserId == userId);
+        if (inventory == null)
+            return NotFound(new { success = false, error = "Инвентарь не найден" });
+        var inventoryId = inventory.Id;
+        var skin = await _context.Skins.FindAsync(skinId);
+        if (skin == null)
+            return NotFound(new { success = false, error = $"Скин не найден" });
+        await _context.InventorySkins.AddAsync(new InventorySkin()
         {
-            lastBoost = DateTime.UtcNow;
-        }
-        if ((DateTime.UtcNow - lastBoost).TotalMinutes >= 1)
-        {
-            var upgradesCount = upgradeIds.Count;
-            var random = new Random();
-            var randomIndex = random.Next(0, upgradesCount);
-            var upgrade = upgradeIds[randomIndex];
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            var userId = user.Id;
-            var inventory = await _context.Inventories.FirstAsync(i => i.UserId == userId);
-            var inventoryId = inventory.Id;
-            var currentUpgrade = _context.InventorySkins.FindAsync(inventoryId, upgrade);
-            if (currentUpgrade == null || currentUpgrade.Result == null)
-            {
-                _context.InventorySkins.Add(new InventorySkin()
-                {
-                    isImprovement = true,
-                    inventoryId = inventoryId,
-                    skinId = upgrade
-                });
-            }
-            else
-            {
-                currentUpgrade.Result.isImprovementUsed = false;
-                currentUpgrade.Result.EndsAt = DateTime.UtcNow.AddSeconds(60);
-                _context.InventorySkins.Update(currentUpgrade.Result);
-            }
-            HttpContext.Session.SetString("LastBoostTime", DateTime.UtcNow.ToString());
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
-        return BadRequest();
+            skinId = skinId,
+            inventoryId = inventoryId,
+            isImprovement = true
+        });
+        await _context.SaveChangesAsync();
+        return Ok(new { success = true });
     }
 }
 

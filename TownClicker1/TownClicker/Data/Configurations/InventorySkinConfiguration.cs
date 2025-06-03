@@ -8,6 +8,6 @@ public class InventorySkinConfiguration : IEntityTypeConfiguration<InventorySkin
 {
     public void Configure(EntityTypeBuilder<InventorySkin> builder)
     {
-        builder.HasKey(u => new { u.inventoryId, u.skinId });
+        builder.HasKey(u => u.Id);
     }
 }
