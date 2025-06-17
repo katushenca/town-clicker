@@ -138,6 +138,13 @@ button.improvement {
   display: inline;
 }
 
+.improvement.disabled {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
 #upgrade-image {
   width: 40px;
   height: 40px;

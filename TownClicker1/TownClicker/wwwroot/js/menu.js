@@ -93,15 +93,23 @@ function calcEffect(building, level) {
 
 async function loadInventory(userName) {
   const response = await fetch(`/api/inventory/${userName}`);
+  const upgradeResponse = await fetch('/api/upgrade/status');
+  const activeUpgrade = await upgradeResponse.json();
+  
   const items = await response.json();
   const grid = document.getElementById('inventory-grid');
   grid.innerHTML = '';
+  
   items.forEach(item => {
     console.log(item.skinId)
     const div = document.createElement('div');
     div.className = 'inventory-item';
+    
+    const buttonClass = activeUpgrade.isActive ? 'improvement disabled' : 'improvement';
+    const disabledAttr = activeUpgrade.isActive ? 'disabled' : '';
+    console.log('load inventory active', activeUpgrade.isActive);
     div.innerHTML = `
-        <button class="improvement" onclick="useImprovement(this, '${userName}', ${item.skinId})">
+        <button class="${buttonClass}"  ${disabledAttr} onclick="useImprovement(this, '${userName}', ${item.skinId})">
          <img src="${item.url}" alt="${item.skinName}">
             <div class="item-name">${item.skinName}</div>
         </button>
@@ -161,7 +169,13 @@ async function useImprovement(buttonElement, username, skinId) {
   const response = await fetch(`/api/inventory/${username}/${skinId}`);
   const improvementData = await response.json();
   console.log(improvementData);
-  showUpgradeNotification(improvementData);
+  if (skinId === 2 || skinId === 5  || skinId === 6 || skinId === 7) {
+    await checkAutoClickUpgrade()
+  }
+  if (skinId !== 5 && skinId !== 6 && skinId !== 7) {
+    showUpgradeNotification(improvementData);
+  }
+  closeMenu();
 }
 
 function showUpgradeNotification(improvementData) {
@@ -188,7 +202,15 @@ function showUpgradeNotification(improvementData) {
 
     if (remaining <= 0) {
       clearInterval(interval);
+      const response = fetch("api/upgrade/end");
       div.style.display = 'none';
+      if (menuTitleText.textContent === 'Инвентарь') {
+        const buttons = document.querySelectorAll('#inventory-grid .improvement.disabled');
+        buttons.forEach(button => {
+          button.disabled = false;
+          button.classList.remove('disabled');
+        });
+      }
     }
   }, 1000);
 }
@@ -197,6 +219,7 @@ async function reload() {
   await window.addEventListener("load", function () {
     console.log("Страница загружена — выполняем код");
     checkUpgradeStatus();
+    checkAutoClickUpgrade();
   });
 }
 async function checkUpgradeStatus() {
@@ -208,4 +231,30 @@ async function checkUpgradeStatus() {
     showUpgradeNotification(data);
   }
 }
+
+async function checkAutoClickUpgrade() {
+  console.log('зашли в проверку')
+  try {
+    const res = await fetch('api/upgrade/status');
+    const upgradeInfo = await res.json();
+
+    if (upgradeInfo.isActive && upgradeInfo.id === 2) {
+      const interval = 500;
+      const duration = new Date(upgradeInfo.endsAt).getTime() - Date.now();
+      const intervalId = setInterval(() => {
+        handleClick();
+      }, interval);
+      setTimeout(() => {
+        clearInterval(intervalId);
+      }, duration);
+    }
+    else if (upgradeInfo.isActive && (upgradeInfo.id === 5 || upgradeInfo.id === 6 || upgradeInfo.id === 7)) {
+      await handleClick(window.bonusValues[upgradeInfo.id]);
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 reload()
