@@ -26,7 +26,7 @@
 <header>
     <div class="header-left">
         <div class="header-left-top">
-            <div class="level-box"><span id="level-value">1</span></div>
+            <div class="level-box"><span id="level-value">0</span></div>
             <span class="resources-item">
                 <img class="resources-icon" src="images/coin.png" alt="Coins" width="24">
                 <span id="coin-count">1000</span>
@@ -59,7 +59,7 @@
             </span>
         </div>
         <div class="progress-bar">
-            <div class="progress-bar-progress" id="progress-bar-value" style="width:30%"></div>
+            <div class="progress-bar-progress" id="progress-bar-value" style="width:0%"></div>
         </div>
     </div>
     <div class="header-center" id="header-center" style="display: none">
@@ -124,6 +124,9 @@
                 +<span class="market-item-info-next-value"></span>
             </span>
         </div>
+        <div class="market-item-level-required">
+            Откроется на уровне <span class="market-item-level-required-value"></span>
+        </div>
     </div>
 </template>
 
@@ -133,6 +136,7 @@
 <script src="js/improvement.js"></script>
 <script src="js/click-money-logic.js"></script>
 <script src="js/improvement-generator.js"></script>
+<script src="js/level.js"></script>
 </body>
 
 </html>
