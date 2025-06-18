@@ -8,6 +8,7 @@ let unsavedClicks = 0;
 let unsavedCoins = 0;
 let coinsPerClick = 1;
 let lastUpdateTime = 0;
+let bonus = 0;
 
 // Конфигурация
 const UPDATE_INTERVAL = 5000; // 20 секунд
@@ -15,13 +16,13 @@ const MIN_CLICKS_FOR_UPDATE = 0;
 const MIN_COINS_FOR_UPDATE = 0;
 
 // Обработчик клика
-function handleClick() {
+async function handleClick(bonus = 1) {
+    const extra = await checkIncrementUpgrades();
     totalClicks++;
     unsavedClicks++;
-    coinBalance += coinsPerClick;
-    unsavedCoins += coinsPerClick;
+    coinBalance += coinsPerClick * extra + (bonus - 1);
+    unsavedCoins += coinsPerClick * extra + (bonus - 1);
     moneyElement.textContent = (Number(moneyElement.textContent) + unsavedCoins).toString();
-    console.log("Money: ", moneyElement.textContent)
     // Проверяем, нужно ли отправить обновление
     if (unsavedClicks >= MIN_CLICKS_FOR_UPDATE || unsavedCoins >= MIN_COINS_FOR_UPDATE) {
         try {
@@ -105,9 +106,33 @@ async function loadBalance() {
     }
 }
 
+async function checkIncrementUpgrades() {
+    try {
+        const res = await fetch('api/upgrade/status');
+        const upgradeInfo = await res.json();
+        console.log('upgradeInfo', upgradeInfo);
+        if (!upgradeInfo.isActive)
+            return 1;
+        if (upgradeInfo.id === 1) {
+            return 2;
+        }
+        else if (upgradeInfo.id === 3) {
+            return 4;
+        }
+        else if (upgradeInfo.id === 4) {
+            return 8;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    return 1;
+}
+
 // async function handleClick() {
 //     await increaseBalance(1);
 // }
-button.addEventListener("click", handleClick);
+button.addEventListener("click", () => handleClick());
 // Инициализация
 // loadInitialData();
+
+

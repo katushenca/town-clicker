@@ -5,6 +5,7 @@ const menuContent = document.getElementById("menu-content");
 
 async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
+  toggleInfoBtn(id);
   menuOverlay.style.display = 'flex';
   if (id === 'Магазин')
     await marketMenu();
@@ -91,15 +92,23 @@ function calcEffect(building, level) {
 
 async function loadInventory(userName) {
   const response = await fetch(`/api/inventory/${userName}`);
+  const upgradeResponse = await fetch('/api/upgrade/status');
+  const activeUpgrade = await upgradeResponse.json();
+  
   const items = await response.json();
   const grid = document.getElementById('inventory-grid');
   grid.innerHTML = '';
+  
   items.forEach(item => {
     console.log(item.skinId)
     const div = document.createElement('div');
     div.className = 'inventory-item';
+    
+    const buttonClass = activeUpgrade.isActive ? 'improvement disabled' : 'improvement';
+    const disabledAttr = activeUpgrade.isActive ? 'disabled' : '';
+    console.log('load inventory active', activeUpgrade.isActive);
     div.innerHTML = `
-        <button class="improvement" onclick="useImprovement(this, '${userName}', ${item.skinId})">
+        <button class="${buttonClass}"  ${disabledAttr} onclick="useImprovement(this, '${userName}', ${item.skinId})">
          <img src="${item.url}" alt="${item.skinName}">
             <div class="item-name">${item.skinName}</div>
         </button>
@@ -204,7 +213,13 @@ async function useImprovement(buttonElement, username, skinId) {
   const response = await fetch(`/api/inventory/${username}/${skinId}`);
   const improvementData = await response.json();
   console.log(improvementData);
-  showUpgradeNotification(improvementData);
+  if (skinId === 2 || skinId === 5  || skinId === 6 || skinId === 7) {
+    await checkAutoClickUpgrade()
+  }
+  if (skinId !== 5 && skinId !== 6 && skinId !== 7) {
+    showUpgradeNotification(improvementData);
+  }
+  closeMenu();
 }
 
 function showUpgradeNotification(improvementData) {
@@ -231,7 +246,15 @@ function showUpgradeNotification(improvementData) {
 
     if (remaining <= 0) {
       clearInterval(interval);
+      const response = fetch("api/upgrade/end");
       div.style.display = 'none';
+      if (menuTitleText.textContent === 'Инвентарь') {
+        const buttons = document.querySelectorAll('#inventory-grid .improvement.disabled');
+        buttons.forEach(button => {
+          button.disabled = false;
+          button.classList.remove('disabled');
+        });
+      }
     }
   }, 1000);
 }
@@ -240,6 +263,7 @@ async function reload() {
   await window.addEventListener("load", function () {
     console.log("Страница загружена — выполняем код");
     checkUpgradeStatus();
+    checkAutoClickUpgrade();
   });
 }
 async function checkUpgradeStatus() {
@@ -251,4 +275,73 @@ async function checkUpgradeStatus() {
     showUpgradeNotification(data);
   }
 }
+
+async function checkAutoClickUpgrade() {
+  console.log('зашли в проверку')
+  try {
+    const res = await fetch('api/upgrade/status');
+    const upgradeInfo = await res.json();
+
+    if (upgradeInfo.isActive && upgradeInfo.id === 2) {
+      const interval = 500;
+      const duration = new Date(upgradeInfo.endsAt).getTime() - Date.now();
+      const intervalId = setInterval(() => {
+        handleClick();
+      }, interval);
+      setTimeout(() => {
+        clearInterval(intervalId);
+      }, duration);
+    }
+    else if (upgradeInfo.isActive && (upgradeInfo.id === 5 || upgradeInfo.id === 6 || upgradeInfo.id === 7)) {
+      await handleClick(window.bonusValues[upgradeInfo.id]);
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 reload()
+
+const infoData = {
+  'Магазин': {
+    title: 'О магазине',
+    text:  `Здесь вы можете купить здания для вашего городка. Чем больше зданий вы покупаете, тем больше у население города. Чем больше домиков одного вида ставите, тем дороже он становится. Над каждым домиком может выпасть улучшение, подробнее об этом в Инвентаре. Вперед покупать домики!`
+  },
+  'Инвентарь': {
+    title: 'О инвентаре',
+    text:  `Здесь хранятся все ваши еще не использованные улучшения. Над каждым домиком может выпасть улучшение - соберите его! Они позволяют быстрее набирать монетки для покупки домиков. Нельзя использовать несколько бонусов сразу.`
+  }
+  
+};
+
+
+const infoBtn   = document.getElementById('info-btn');
+const infoOv    = document.getElementById('info-overlay');
+const infoClose = document.getElementById('info-close');
+const infoTitle = document.getElementById('info-title');
+const infoText  = document.getElementById('info-text');
+
+
+infoBtn .addEventListener('click', () => {
+  const current = menuTitleText.textContent.trim();
+  const data    = infoData[current];
+  if(!data) return;
+
+  infoTitle.textContent = data.title;
+  infoText .textContent = data.text;
+  infoOv.classList.remove('hidden');
+});
+
+infoClose.addEventListener('click', () => infoOv.classList.add('hidden'));
+infoOv    .addEventListener('click', e=>{
+  if(e.target.id === 'info-overlay') infoOv.classList.add('hidden');
+});
+
+function toggleInfoBtn(menuId){
+  if(infoData[menuId]) {
+    infoBtn.style.display = 'block';
+  } else {
+    infoBtn.style.display = 'none';
+  }
+}

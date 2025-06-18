@@ -82,6 +82,15 @@ public class InventoryController : ControllerBase
         });
     }
     
+    [HttpGet("api/upgrade/end")]
+    public Task<IActionResult> EndImprovement()
+    {
+        if (User.Identity is { IsAuthenticated: false })
+            return Task.FromResult<IActionResult>(Unauthorized());
+        HttpContext.Session.Remove("ActiveUpgrade");
+        return Task.FromResult<IActionResult>(Ok());
+    }
+    
     [HttpGet("/api/upgrade/status")]
     public IActionResult GetUpgradeStatus()
     {
