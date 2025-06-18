@@ -323,8 +323,9 @@ button.improvement {
 .info-window{
     position:absolute;
     top:60px;
-    right:95px;
-    width:320px;
+    left: 50px;
+    right: 50px;
+    width: 80%;
     background:#fff9db;
     border-radius:8px;
     padding:25px 22px;
@@ -351,7 +352,7 @@ button.improvement {
 }
 
 .info-icon{
-    width: 40px;
+    width: 30px;
     height: auto;
 }
 
@@ -360,3 +361,56 @@ button.improvement {
     inset: 0;
     background: rgba(0, 0, 0, .35);
 }
+
+.menu-title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.menu-title-container h2 {
+    margin: 0;
+    font-size: 30px;
+}
+
+#info-btn {
+    position: relative;
+    top: 0;
+    right: 0;
+}
+
+.info-container {
+    position: relative;
+    display: inline-block;
+}
+
+.info-icon {
+    width: 30px;
+    cursor: pointer;
+}
+
+.info-tooltip {
+    position: absolute;
+    top: 40px;
+    left: -20px;
+    width: 280px;
+    background: #fff9db;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.info-container:hover .info-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hidden {
+    display: none !important;
+}
+

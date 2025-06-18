@@ -4,7 +4,28 @@ const menuTitleText = document.getElementById("menu-title-text");
 
 async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
-  toggleInfoBtn(id);
+  const infoContainer = document.getElementById("info-container");
+  const infoTitle = document.getElementById("info-title");
+  const infoText = document.getElementById("info-text");
+
+  const tooltipData = {
+    'Магазин': {
+      title: 'О магазине',
+      text: `Здесь вы можете купить здания для вашего городка. Чем больше зданий вы покупаете, тем больше население.`
+    },
+    'Инвентарь': {
+      title: 'О инвентаре',
+      text: `Здесь хранятся собранные бонусы. Нельзя использовать несколько одновременно.`
+    }
+  };
+
+  if (tooltipData[id]) {
+    infoContainer.classList.remove('hidden');
+    infoTitle.textContent = tooltipData[id].title;
+    infoText.textContent = tooltipData[id].text;
+  } else {
+    infoContainer.classList.add('hidden');
+  }
   menuOverlay.style.display = 'flex';
   if (id === 'Магазин') {
     document.getElementById('market-list').style.display = 'flex';
@@ -119,15 +140,11 @@ async function loadInventory(userName) {
   
   const items = await response.json();
   const grid = document.getElementById('inventory-grid');
-  
+  const buttonClass = activeUpgrade.isActive && !window.noTimeImprovements.includes(Number(activeUpgrade.id))  ? 'improvement disabled' : 'improvement';
+  const disabledAttr = activeUpgrade.isActive && !window.noTimeImprovements.includes(Number(activeUpgrade.id)) ? 'disabled' : '';
   items.forEach(item => {
-    console.log(item.skinId)
     const div = document.createElement('div');
     div.className = 'inventory-item';
-    
-    const buttonClass = activeUpgrade.isActive ? 'improvement disabled' : 'improvement';
-    const disabledAttr = activeUpgrade.isActive ? 'disabled' : '';
-    console.log('load inventory active', activeUpgrade.isActive);
     div.innerHTML = `
         <button class="${buttonClass}"  ${disabledAttr} onclick="useImprovement(this, '${userName}', ${item.skinId})">
          <img src="${item.url}" alt="${item.skinName}">
@@ -233,7 +250,6 @@ async function useImprovement(buttonElement, username, skinId) {
   buttonElement.closest('.inventory-item')?.remove();
   const response = await fetch(`/api/inventory/${username}/${skinId}`);
   const improvementData = await response.json();
-  console.log(improvementData);
   if (skinId === 2 || skinId === 5  || skinId === 6 || skinId === 7) {
     await checkAutoClickUpgrade()
   }
@@ -250,9 +266,7 @@ function showUpgradeNotification(improvementData) {
   const upgradeName = document.getElementById('upgrade-name');
   const progressBar = document.getElementById('upgrade-progress');
   const image = document.getElementById('upgrade-image');
-  console.log(`${improvementData.endsAt} дада`);
   let remaining = Math.floor((new Date(improvementData.endsAt).getTime() - Date.now()) / 1000);
-  console.log(improvementData.name)
   div.style.display = 'flex';
   timerText.textContent = remaining;
   progressBar.style.width = '0%';
@@ -267,7 +281,7 @@ function showUpgradeNotification(improvementData) {
 
     if (remaining <= 0) {
       clearInterval(interval);
-      const response = fetch("api/upgrade/end");
+      const response = fetch("/api/upgrade/end");
       div.style.display = 'none';
       if (menuTitleText.textContent === 'Инвентарь') {
         const buttons = document.querySelectorAll('#inventory-grid .improvement.disabled');
@@ -282,7 +296,6 @@ function showUpgradeNotification(improvementData) {
 
 async function reload() {
   await window.addEventListener("load", function () {
-    console.log("Страница загружена — выполняем код");
     checkUpgradeStatus();
     checkAutoClickUpgrade();
   });
@@ -290,17 +303,14 @@ async function reload() {
 async function checkUpgradeStatus() {
   const response = await fetch('/api/upgrade/status');
   const data = await response.json();
-  console.log('мяу')
   if (data.isActive) {
-    console.log('активен')
     showUpgradeNotification(data);
   }
 }
 
 async function checkAutoClickUpgrade() {
-  console.log('зашли в проверку')
   try {
-    const res = await fetch('api/upgrade/status');
+    const res = await fetch('/api/upgrade/status');
     const upgradeInfo = await res.json();
 
     if (upgradeInfo.isActive && upgradeInfo.id === 2) {
@@ -323,46 +333,3 @@ async function checkAutoClickUpgrade() {
 }
 
 reload()
-
-const infoData = {
-  'Магазин': {
-    title: 'О магазине',
-    text:  `Здесь вы можете купить здания для вашего городка. Чем больше зданий вы покупаете, тем больше у население города. Чем больше домиков одного вида ставите, тем дороже он становится. Над каждым домиком может выпасть улучшение, подробнее об этом в Инвентаре. Вперед покупать домики!`
-  },
-  'Инвентарь': {
-    title: 'О инвентаре',
-    text:  `Здесь хранятся все ваши еще не использованные улучшения. Над каждым домиком может выпасть улучшение - соберите его! Они позволяют быстрее набирать монетки для покупки домиков. Нельзя использовать несколько бонусов сразу.`
-  }
-  
-};
-
-
-const infoBtn   = document.getElementById('info-btn');
-const infoOv    = document.getElementById('info-overlay');
-const infoClose = document.getElementById('info-close');
-const infoTitle = document.getElementById('info-title');
-const infoText  = document.getElementById('info-text');
-
-
-infoBtn .addEventListener('click', () => {
-  const current = menuTitleText.textContent.trim();
-  const data    = infoData[current];
-  if(!data) return;
-
-  infoTitle.textContent = data.title;
-  infoText .textContent = data.text;
-  infoOv.classList.remove('hidden');
-});
-
-infoClose.addEventListener('click', () => infoOv.classList.add('hidden'));
-infoOv    .addEventListener('click', e=>{
-  if(e.target.id === 'info-overlay') infoOv.classList.add('hidden');
-});
-
-function toggleInfoBtn(menuId){
-  if(infoData[menuId]) {
-    infoBtn.style.display = 'block';
-  } else {
-    infoBtn.style.display = 'none';
-  }
-}
