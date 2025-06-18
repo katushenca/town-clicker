@@ -136,7 +136,7 @@ async function loadRank(userName, type='popularity') {
   const response = await fetch(`/api/rank/statistics/${type}`);
   const items = await response.json();
 
-  const person = await fetch(`/api/rank/statistics/${userName}123`);
+  const person = await fetch(`/api/rank/statistics/${userName}`);
   const person_items =  await person.json();
   let user_place = '-';
   
