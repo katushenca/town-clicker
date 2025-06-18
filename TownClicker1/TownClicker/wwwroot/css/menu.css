@@ -11,17 +11,19 @@
 }
 
 .menu {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #FFEAC4;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
-  width: 75%;
-  height: 75%;
-  overflow-x: hidden;
-  overflow-y: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #FFEAC4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 75%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
+
 
 .menu-title {
   text-align: left;
@@ -412,5 +414,33 @@ button.improvement {
 
 .hidden {
     display: none !important;
+}
+
+#menu-content {
+    overflow-y: auto;
+    flex-grow: 1;
+    box-sizing: border-box;
+    padding-right: 0;
+    padding-bottom: 0;
+}
+
+
+#inventory-grid,
+#market-list {
+    padding-right: 5px;
+    padding-bottom: 10px;
+}
+#inventory-grid {
+    padding: 10px 5px 5px 10px;
+}
+
+
+#menu-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
 }
 
