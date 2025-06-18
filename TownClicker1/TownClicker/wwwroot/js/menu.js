@@ -1,15 +1,15 @@
 const menuOverlay = document.getElementById("menu-overlay");
 const menuTitleText = document.getElementById("menu-title-text");
-const menuContent = document.getElementById("menu-content");
 
 
 async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
   toggleInfoBtn(id);
   menuOverlay.style.display = 'flex';
-  if (id === 'Магазин')
+  if (id === 'Магазин') {
+    document.getElementById('market-list').style.display = 'flex';
     await marketMenu();
-  else if (id === 'Инвентарь') {
+  } else if (id === 'Инвентарь') {
     document.getElementById('inventory-grid').style.display = 'flex';
     await loadInventory(userName);
   } else if (id === 'Рейтинг') {
@@ -20,7 +20,10 @@ async function openMenu(id, userName=null) {
 
 function closeMenu() {
   menuOverlay.style.display = 'none';
+  document.getElementById('inventory-grid').style.display = 'none';
+  document.getElementById('market-list').style.display = 'none';
   document.getElementById('inventory-grid').innerHTML = '';
+  document.getElementById('market-list').innerHTML = '';
   resetRank();
 }
 
@@ -32,8 +35,7 @@ async function marketMenu() {
     acc[item.upgradeId] = item.level;
     return acc;
   }, {});
-  const container = document.createElement("div");
-  container.classList.add('market-list');
+  const container = document.getElementById('market-list');
   const template = document.getElementById('market-item-template');
   for (const building of buildings) {
     const level = marketItemLevels[building.id] || 0;
@@ -56,8 +58,7 @@ async function marketMenu() {
     }
     item.addEventListener('click', () => buyBuilding(building.id));
     container.appendChild(item);
-  };
-  menuContent.appendChild(container);
+  }
 }
 
 async function buyBuilding(id) {
@@ -118,7 +119,6 @@ async function loadInventory(userName) {
   
   const items = await response.json();
   const grid = document.getElementById('inventory-grid');
-  grid.innerHTML = '';
   
   items.forEach(item => {
     console.log(item.skinId)
