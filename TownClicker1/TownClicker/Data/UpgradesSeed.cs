@@ -32,7 +32,7 @@ public class UpgradesSeed
                 Name = "Building 2",
                 Description = "Building 2",
                 LevelRequired = 1,
-                InitialCost = 500,
+                InitialCost = 250,
                 CostMultiplier = 1.5,
                 EffectType = EffectType.Flat,
                 EffectValue = 5
@@ -87,7 +87,7 @@ public class UpgradesSeed
                 Name = "Building 7",
                 Description = "Building 7",
                 LevelRequired = 2,
-                InitialCost = 250,
+                InitialCost = 500,
                 CostMultiplier = 10,
                 EffectType = EffectType.Mult,
                 EffectValue = 0.02
