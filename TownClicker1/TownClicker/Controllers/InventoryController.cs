@@ -82,7 +82,7 @@ public class InventoryController : ControllerBase
         });
     }
     
-    [HttpGet("api/upgrade/end")]
+    [HttpGet("/api/upgrade/end")]
     public Task<IActionResult> EndImprovement()
     {
         if (User.Identity is { IsAuthenticated: false })

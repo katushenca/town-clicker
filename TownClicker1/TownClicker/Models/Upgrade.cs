@@ -8,6 +8,7 @@ public class Upgrade
     public string Name { get; set; }
     public string Description { get; set; }
 
+    public int LevelRequired { get; set; }
     public double InitialCost { get; set; }
     public double CostMultiplier { get; set; }
     public EffectType EffectType { get; set; }

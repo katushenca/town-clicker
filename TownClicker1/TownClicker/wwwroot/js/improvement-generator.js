@@ -14,6 +14,8 @@ improvements = {
     7: '/images/improvements/bonus_500.png',
 };
 
+window.noTimeImprovements = [5, 6, 7];
+
 function drawImprovement() {
     const buildings = document.querySelectorAll("#building");
     const randomBuilding = buildings[Math.floor(Math.random() * buildings.length)];

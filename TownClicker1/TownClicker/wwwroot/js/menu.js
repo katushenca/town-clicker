@@ -60,12 +60,21 @@ async function marketMenu() {
     const level = marketItemLevels[building.id] || 0;
     const item = template.content.cloneNode(true).querySelector('.market-item');
     item.id = `market-item-${building.id}`;
+    item.classList.add(`market-item-user-level-${building.levelRequired}`);
     item.querySelector('.market-item-level-value').textContent = level;
     item.querySelector('.market-item-img').src = buildingsTextures.buildings[building.id].left[0];
     item.querySelector('.market-item-img').alt = building.name;
     item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
     item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
     item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
+    item.querySelector('.market-item-level-required-value').textContent = building.levelRequired;
+    if (currentUserLevel < building.levelRequired) {
+      item.querySelector('.market-item-img').classList.add('market-item-img-level-required');
+      item.querySelector('.market-item-cost-value').style.display = 'none';
+      item.querySelector('.market-item-info').style.display = 'none';
+    } else {
+      item.querySelector('.market-item-level-required').style.display = 'none';
+    }
     item.addEventListener('click', () => buyBuilding(building.id));
     container.appendChild(item);
   };
@@ -89,6 +98,18 @@ async function buyBuilding(id) {
     const json = await response.json();
     document.getElementById('coin-count').textContent = json.money;
     document.getElementById('click-count').textContent = json.popularity;
+    const isLevelUp = await updateLevel(json.popularity);
+    if (isLevelUp) {
+      for (let i = 1; i <= currentUserLevel; i++) {
+        const newBuildings = document.getElementsByClassName(`market-item-user-level-${i}`);
+        for (const newBuilding of newBuildings) {
+          newBuilding.querySelector('.market-item-img').classList.remove('market-item-img-level-required');
+          newBuilding.querySelector('.market-item-cost-value').style.display = 'block';
+          newBuilding.querySelector('.market-item-info').style.display = 'block';
+          newBuilding.querySelector('.market-item-level-required').style.display = 'none';
+        }
+      }
+    }
   }
 }
 
@@ -119,15 +140,11 @@ async function loadInventory(userName) {
   const items = await response.json();
   const grid = document.getElementById('inventory-grid');
   grid.innerHTML = '';
-  
+  const buttonClass = activeUpgrade.isActive && !window.noTimeImprovements.includes(Number(activeUpgrade.id))  ? 'improvement disabled' : 'improvement';
+  const disabledAttr = activeUpgrade.isActive && !window.noTimeImprovements.includes(Number(activeUpgrade.id)) ? 'disabled' : '';
   items.forEach(item => {
-    console.log(item.skinId)
     const div = document.createElement('div');
     div.className = 'inventory-item';
-    
-    const buttonClass = activeUpgrade.isActive ? 'improvement disabled' : 'improvement';
-    const disabledAttr = activeUpgrade.isActive ? 'disabled' : '';
-    console.log('load inventory active', activeUpgrade.isActive);
     div.innerHTML = `
         <button class="${buttonClass}"  ${disabledAttr} onclick="useImprovement(this, '${userName}', ${item.skinId})">
          <img src="${item.url}" alt="${item.skinName}">
@@ -233,7 +250,6 @@ async function useImprovement(buttonElement, username, skinId) {
   buttonElement.closest('.inventory-item')?.remove();
   const response = await fetch(`/api/inventory/${username}/${skinId}`);
   const improvementData = await response.json();
-  console.log(improvementData);
   if (skinId === 2 || skinId === 5  || skinId === 6 || skinId === 7) {
     await checkAutoClickUpgrade()
   }
@@ -250,9 +266,7 @@ function showUpgradeNotification(improvementData) {
   const upgradeName = document.getElementById('upgrade-name');
   const progressBar = document.getElementById('upgrade-progress');
   const image = document.getElementById('upgrade-image');
-  console.log(`${improvementData.endsAt} дада`);
   let remaining = Math.floor((new Date(improvementData.endsAt).getTime() - Date.now()) / 1000);
-  console.log(improvementData.name)
   div.style.display = 'flex';
   timerText.textContent = remaining;
   progressBar.style.width = '0%';
@@ -267,7 +281,7 @@ function showUpgradeNotification(improvementData) {
 
     if (remaining <= 0) {
       clearInterval(interval);
-      const response = fetch("api/upgrade/end");
+      const response = fetch("/api/upgrade/end");
       div.style.display = 'none';
       if (menuTitleText.textContent === 'Инвентарь') {
         const buttons = document.querySelectorAll('#inventory-grid .improvement.disabled');
@@ -282,7 +296,6 @@ function showUpgradeNotification(improvementData) {
 
 async function reload() {
   await window.addEventListener("load", function () {
-    console.log("Страница загружена — выполняем код");
     checkUpgradeStatus();
     checkAutoClickUpgrade();
   });
@@ -290,17 +303,14 @@ async function reload() {
 async function checkUpgradeStatus() {
   const response = await fetch('/api/upgrade/status');
   const data = await response.json();
-  console.log('мяу')
   if (data.isActive) {
-    console.log('активен')
     showUpgradeNotification(data);
   }
 }
 
 async function checkAutoClickUpgrade() {
-  console.log('зашли в проверку')
   try {
-    const res = await fetch('api/upgrade/status');
+    const res = await fetch('/api/upgrade/status');
     const upgradeInfo = await res.json();
 
     if (upgradeInfo.isActive && upgradeInfo.id === 2) {
