@@ -5,7 +5,28 @@ const menuContent = document.getElementById("menu-content");
 
 async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
-  toggleInfoBtn(id);
+  const infoContainer = document.getElementById("info-container");
+  const infoTitle = document.getElementById("info-title");
+  const infoText = document.getElementById("info-text");
+
+  const tooltipData = {
+    'Магазин': {
+      title: 'О магазине',
+      text: `Здесь вы можете купить здания для вашего городка. Чем больше зданий вы покупаете, тем больше население.`
+    },
+    'Инвентарь': {
+      title: 'О инвентаре',
+      text: `Здесь хранятся собранные бонусы. Нельзя использовать несколько одновременно.`
+    }
+  };
+
+  if (tooltipData[id]) {
+    infoContainer.classList.remove('hidden');
+    infoTitle.textContent = tooltipData[id].title;
+    infoText.textContent = tooltipData[id].text;
+  } else {
+    infoContainer.classList.add('hidden');
+  }
   menuOverlay.style.display = 'flex';
   if (id === 'Магазин')
     await marketMenu();
@@ -302,46 +323,3 @@ async function checkAutoClickUpgrade() {
 }
 
 reload()
-
-const infoData = {
-  'Магазин': {
-    title: 'О магазине',
-    text:  `Здесь вы можете купить здания для вашего городка. Чем больше зданий вы покупаете, тем больше у население города. Чем больше домиков одного вида ставите, тем дороже он становится. Над каждым домиком может выпасть улучшение, подробнее об этом в Инвентаре. Вперед покупать домики!`
-  },
-  'Инвентарь': {
-    title: 'О инвентаре',
-    text:  `Здесь хранятся все ваши еще не использованные улучшения. Над каждым домиком может выпасть улучшение - соберите его! Они позволяют быстрее набирать монетки для покупки домиков. Нельзя использовать несколько бонусов сразу.`
-  }
-  
-};
-
-
-const infoBtn   = document.getElementById('info-btn');
-const infoOv    = document.getElementById('info-overlay');
-const infoClose = document.getElementById('info-close');
-const infoTitle = document.getElementById('info-title');
-const infoText  = document.getElementById('info-text');
-
-
-infoBtn .addEventListener('click', () => {
-  const current = menuTitleText.textContent.trim();
-  const data    = infoData[current];
-  if(!data) return;
-
-  infoTitle.textContent = data.title;
-  infoText .textContent = data.text;
-  infoOv.classList.remove('hidden');
-});
-
-infoClose.addEventListener('click', () => infoOv.classList.add('hidden'));
-infoOv    .addEventListener('click', e=>{
-  if(e.target.id === 'info-overlay') infoOv.classList.add('hidden');
-});
-
-function toggleInfoBtn(menuId){
-  if(infoData[menuId]) {
-    infoBtn.style.display = 'block';
-  } else {
-    infoBtn.style.display = 'none';
-  }
-}
