@@ -152,7 +152,7 @@ button.improvement {
   margin: 0;
 }
 
-#rating-table {
+.rating-table {
   width: 70%;
   height: 60vh;
   border-collapse: collapse;
@@ -163,19 +163,30 @@ button.improvement {
   overflow-x: hidden;
 }
 
-#rating-table thead,
-#rating-table tbody {
+.rating-table thead,
+.rating-table tbody,
+.rating-table tfoot {
   width: 100%;
 }
 
-#rating-table tr {
+.rating-table thead {
+    position: sticky;
+    top: 0;
+}
+
+.rating-table tfoot {
+    position: sticky;
+    bottom: 0;
+}
+
+.rating-table tr {
   display: table;
   width: 100%;
   table-layout: fixed;
 }
 
-#rating-table th,
-#rating-table td {
+.rating-table th,
+.rating-table td {
   padding: 12px 10px;
   text-align: left;
   overflow: hidden;
@@ -183,49 +194,68 @@ button.improvement {
   white-space: nowrap;
 }
 
-#rating-table th {
+.rating-table th {
   background-color: #6D8FAB;
   color: white;
   font-size: 16px;
-  position: sticky;
-  top: 0;
 }
 
-#rating-table td {
+.rating-table td {
   border-bottom: 1px solid #D9D9D9;
   background-color: rgba(255, 234, 196, 0.7);
 }
 
-#rating-table tr:nth-child(even) td {
-  background-color: rgba(255, 234, 196, 0.9);
-}
 
-#rating-table tr:hover td {
+
+.rating-table tr:hover td {
   background-color: #FFEAC4;
   transform: scale(1.01);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-#rating-table tr:first-child td {
-  background-color: #F5D7A1;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#rating-table::-webkit-scrollbar {
+.rating-table::-webkit-scrollbar {
   width: 8px;
 }
 
-#rating-table::-webkit-scrollbar-track {
+.rating-table::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 4px;
 }
 
-#rating-table::-webkit-scrollbar-thumb {
+.rating-table::-webkit-scrollbar-thumb {
   background: #6D8FAB;
   border-radius: 4px;
 }
 
-#rating-table::-webkit-scrollbar-thumb:hover {
+.rating-table::-webkit-scrollbar-thumb:hover {
   background: #5a7c99;
+}
+
+.tabs {
+    margin-bottom: 10px;
+}
+.tab-button {
+    padding: 8px 16px;
+    background: #eee;
+    border: none;
+    cursor: pointer;
+}
+.tab-button.active {
+    background: #ddd;
+    font-weight: bold;
+}
+
+.highlight {
+    background-color: #f0c575;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.user-footer {
+    background-color: #f0c575;
+    color: #2c3e50;
+    font-weight: bold;
+}
+.user-footer td {
+    border-top: 2px solid #6D8FAB;
 }

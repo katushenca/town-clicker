@@ -23,26 +23,27 @@ public class RankController : ControllerBase
         if (User.Identity is { IsAuthenticated: false })
             return Unauthorized();
         var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-        var userId = user.Id;
-        var statistics = await _context.UsersStatistics.FirstAsync(i => i.UserId == userId);
+        var statistics = await _context.UsersStatistics.FirstAsync(i => i.UserId == user.Id);
+        
         return Ok(new
         {
-            userName,
-            statistics.Money,
-            statistics.Clicks
+            id = user.Id,
+            popularity = statistics.Popularity,
+            clicks = statistics.Clicks
         });
     }
     
-    [HttpGet("statistics/money")]
-    public async Task<IActionResult> GetAllMoneyStatistics()
+    [HttpGet("statistics/popularity")]
+    public async Task<IActionResult> GetAllPopularityStatistics()
     {
         var topUsersByMoney = await _context.UsersStatistics
-            .OrderByDescending(us => us.Money)
+            .OrderByDescending(us => us.Popularity)
             .Take(10)
             .Select(stat => new
             {
+                id = stat.User.Id,
                 username = stat.User.UserName,
-                data = stat.Money,
+                data = stat.Popularity
             })
             .ToListAsync();
         return Ok(topUsersByMoney);
@@ -56,6 +57,7 @@ public class RankController : ControllerBase
             .Take(10)
             .Select(stat => new
             {
+                id = stat.User.Id,
                 username = stat.User.UserName,
                 data = stat.Clicks
             })
