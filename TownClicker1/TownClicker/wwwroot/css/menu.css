@@ -301,6 +301,7 @@ button.improvement {
 }
 .user-footer td {
     border-top: 2px solid #6D8FAB;
+}
 .icon-btn{
     background:none;
     border:none;
@@ -350,7 +351,8 @@ button.improvement {
     height: auto;
 }
 
-#info-overlay{
-    position:absolute; inset:0;
-    background:rgba(0,0,0,.35);
+#info-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .35);
 }
