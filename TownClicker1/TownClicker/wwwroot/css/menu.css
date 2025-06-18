@@ -99,6 +99,10 @@
     transition: transform 0.3s ease;
 }
 
+.market-item-img-level-required {
+    filter: grayscale(100%);
+}
+
 #inventory-grid {
     display: flex;
     flex-wrap: wrap;

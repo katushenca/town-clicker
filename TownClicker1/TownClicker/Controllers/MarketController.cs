@@ -13,6 +13,16 @@ public class MarketController(ApplicationDbContext context, UserManager<User> us
 {
     private readonly ApplicationDbContext _context = context;
     private readonly UserManager<User> _userManager = userManager;
+    
+    
+    private static readonly long[] _levels = [0, 5, 25, 75, 150, 300, 750, 1000, 2000, 5000, 10000];
+
+
+    [HttpGet("levels")]
+    public IActionResult MarketLevels()
+    {
+        return Ok(_levels);
+    }
 
     [HttpGet("upgrades")]
     public IActionResult MarketUpgrades()
@@ -22,6 +32,7 @@ public class MarketController(ApplicationDbContext context, UserManager<User> us
             {
                 u.Id,
                 u.Name,
+                u.LevelRequired,
                 u.InitialCost,
                 u.CostMultiplier,
                 EffectType = u.EffectType.ToString(),
@@ -55,9 +66,14 @@ public class MarketController(ApplicationDbContext context, UserManager<User> us
         var userUpgrades = _context.UsersUpgrades.Where(uu => uu.UserId == userId).ToDictionary(uu => uu.UpgradeId);
         var currentUserUpgrade = userUpgrades.GetValueOrDefault(upgradeId);
         var level = currentUserUpgrade?.Level ?? 0;
+
+        if (_levels[currentUpgrade.LevelRequired] > stats.Popularity)
+            return BadRequest("User level too low");
+
         var cost = (long)(currentUpgrade.InitialCost * Math.Pow(currentUpgrade.CostMultiplier, level));
         if (stats.Money < cost)
             return BadRequest("Not enough money");
+
         if (currentUserUpgrade == null)
         {
             var newUpgrade = new UserUpgrades

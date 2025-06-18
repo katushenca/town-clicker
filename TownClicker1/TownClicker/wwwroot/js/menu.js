@@ -39,12 +39,21 @@ async function marketMenu() {
     const level = marketItemLevels[building.id] || 0;
     const item = template.content.cloneNode(true).querySelector('.market-item');
     item.id = `market-item-${building.id}`;
+    item.classList.add(`market-item-user-level-${building.levelRequired}`);
     item.querySelector('.market-item-level-value').textContent = level;
     item.querySelector('.market-item-img').src = buildingsTextures.buildings[building.id].left[0];
     item.querySelector('.market-item-img').alt = building.name;
     item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
     item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
     item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
+    item.querySelector('.market-item-level-required-value').textContent = building.levelRequired;
+    if (currentUserLevel < building.levelRequired) {
+      item.querySelector('.market-item-img').classList.add('market-item-img-level-required');
+      item.querySelector('.market-item-cost-value').style.display = 'none';
+      item.querySelector('.market-item-info').style.display = 'none';
+    } else {
+      item.querySelector('.market-item-level-required').style.display = 'none';
+    }
     item.addEventListener('click', () => buyBuilding(building.id));
     container.appendChild(item);
   };
@@ -68,6 +77,18 @@ async function buyBuilding(id) {
     const json = await response.json();
     document.getElementById('coin-count').textContent = json.money;
     document.getElementById('click-count').textContent = json.popularity;
+    const isLevelUp = await updateLevel(json.popularity);
+    if (isLevelUp) {
+      for (let i = 1; i <= currentUserLevel; i++) {
+        const newBuildings = document.getElementsByClassName(`market-item-user-level-${i}`);
+        for (const newBuilding of newBuildings) {
+          newBuilding.querySelector('.market-item-img').classList.remove('market-item-img-level-required');
+          newBuilding.querySelector('.market-item-cost-value').style.display = 'block';
+          newBuilding.querySelector('.market-item-info').style.display = 'block';
+          newBuilding.querySelector('.market-item-level-required').style.display = 'none';
+        }
+      }
+    }
   }
 }
 
