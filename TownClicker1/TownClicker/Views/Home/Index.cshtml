@@ -102,6 +102,10 @@
 <div class="menu-overlay" id="menu-overlay" style="display: none;">
     <div class="menu">
         <button class="menu-close-btn" onclick="closeMenu()">×</button>
+        <button id="info-btn" class="icon-btn" title="Информация">
+            <img src="/images/i.png" class="info-icon" alt="Информация">
+        </button>
+
         <h2 class="menu-title" id="menu-title-text">Menu</h2>
         <div id="menu-content">
             <div id="inventory-grid" style="display: none;"></div>
@@ -109,6 +113,15 @@
         </div>
     </div>
 </div>
+<div id="info-overlay" class="overlay hidden">
+    <div class="info-window">
+        <button id="info-close" class="icon-btn close-btn">×</button>
+        <h3 id="info-title">---</h3>
+        <p  id="info-text">---</p>
+    </div>
+</div>
+
+
 
 <template id="market-item-template">
     <div class="market-item">

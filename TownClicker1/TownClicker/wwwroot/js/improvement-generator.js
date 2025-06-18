@@ -45,4 +45,4 @@ function drawImprovement() {
     })
 }
 
-setInterval(drawImprovement, 40_000);
+setInterval(drawImprovement, 5_000);

@@ -62,6 +62,8 @@
     text-align: center;
     transition: transform 0.3s ease;
     user-select: none;
+    padding: 4px;
+    box-sizing: border-box;
 }
 
 .market-item:hover {
@@ -79,15 +81,21 @@
 
 .market-item-img-container {
     width: 100%;
-    height: auto;
     aspect-ratio: 1;
-    padding: 10%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .market-item-img {
-    height: 70%;
+    max-width: 90%;
+    max-height: 90%;
+    height: auto;
+    width: auto;
     margin: auto;
-    transform: translate(8px, 0);
+    object-fit: contain;
+    transform: translate(4px, 0);
     transition: transform 0.3s ease;
 }
 
@@ -235,4 +243,58 @@ button.improvement {
 
 #rating-table::-webkit-scrollbar-thumb:hover {
   background: #5a7c99;
+}
+
+.icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+}
+
+.overlay{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.35);
+    display:flex; justify-content:center; align-items:center;
+    z-index:900;
+}
+.hidden{display:none}
+
+.info-window{
+    position:absolute;
+    top:60px;
+    right:95px;
+    width:320px;
+    background:#fff9db;
+    border-radius:8px;
+    padding:25px 22px;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);
+    z-index:5;
+}
+
+.info-window h3{margin-top:0}
+
+.icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+}
+#info-btn{
+    position:absolute;
+    top:18px;
+    right:20%;
+}
+.close-btn{
+    position:absolute;
+    top:8px; right:8px;
+    font-size:20px;
+}
+
+.info-icon{
+    width: 40px;
+    height: auto;
+}
+
+#info-overlay{
+    position:absolute; inset:0;
+    background:rgba(0,0,0,.35);
 }
