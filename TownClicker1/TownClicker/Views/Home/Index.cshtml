@@ -54,7 +54,7 @@
                 }
             </span>
             <span class="resources-item">
-                 <img class="resources-icon" src="images/people.png" alt="Clicks" width="24">
+                <img class="resources-icon" src="images/people.png" alt="Clicks" width="24">
                 <span id="click-count">0</span>
             </span>
         </div>
@@ -72,13 +72,33 @@
         </div>
     </div>
     <div class="header-right">
-        <a asp-controller="Account" asp-action="Login">
-            @if (User.Identity is { IsAuthenticated: true })
-            {
-                <span>@User.Identity.Name</span>
+        @if (User.Identity is { IsAuthenticated: true })
+        {
+            <div class="profile-dropdown">
+                <div class="profile-bar" onclick="toggleProfileMenu()">
+                    <img src="images/user.png" alt="avatar" class="avatar-icon">
+                    <span class="username">@User.Identity.Name</span>
+                    <span class="arrow">▼</span>
+                </div>
+
+                <div class="profile-menu hidden" id="profile-menu">
+                    <div class="menu-button-wrapper">
+                        <a class="menu-block change" asp-controller="Account" asp-action="Login">
+                            <!-- иконка обновления -->
+                            <img class="user-icon" src="images/change_account.png"/>
+                            <span class="profile-text">Сменить аккаунт</span>
+                        </a>
+                    </div>
+                    <div class="menu-button-wrapper">
+                        <a class="menu-block logout" asp-controller="Account" asp-action="Logout">
+                            <img class="user-icon" src="images/logout.png"/>
+                            <span class="profile-text">Выйти</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
             }
-            <img class="menu-icon" src="images/user.png" alt="User" width="24">
-        </a>
+        
     </div>
 </header>
 

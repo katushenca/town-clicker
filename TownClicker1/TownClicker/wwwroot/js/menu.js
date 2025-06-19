@@ -332,4 +332,13 @@ async function checkAutoClickUpgrade() {
   }
 }
 
+function toggleProfileMenu() {
+  const menu = document.getElementById('profile-menu');
+  menu.classList.toggle('hidden');
+}
+
+function changeAccount() {
+  
+}
+
 reload()
