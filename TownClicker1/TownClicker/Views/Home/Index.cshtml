@@ -28,34 +28,12 @@
         <div class="header-left-top">
             <div class="level-box"><span id="level-value">0</span></div>
             <span class="resources-item">
-                <img class="resources-icon" src="images/coin.png" alt="Coins" width="24">
-                <span id="coin-count">1000</span>
-                
-                @if (User.Identity is { IsAuthenticated: true })
-                {
-                    <script>
-                        async function loadBalance() {
-                            try {
-                                const clicks = document.getElementById('coin-count');
-                                const response = await fetch('http://localhost:5045/api/Statistics');
-                                if (!response.ok) {
-                                    throw new Error('Ошибка HTTP: ' + response.status);
-                                }
-                                const money = await (await response.json())['coins'];
-                                clicks.textContent = money;
-                                console.log('Init coins', money)
-                            } catch (error) {
-                                console.error('Ошибка:', error);
-                            }
-                        }
-
-                        loadBalance();
-                    </script>
-                }
+                <img class="resources-icon" src="images/coin.png" alt="Moneys" width="24">
+                <span id="money-count">0</span>
             </span>
             <span class="resources-item">
-                 <img class="resources-icon" src="images/people.png" alt="Clicks" width="24">
-                <span id="click-count">0</span>
+                 <img class="resources-icon" src="images/people.png" alt="Population" width="24">
+                <span id="population-count">0</span>
             </span>
         </div>
         <div class="progress-bar">
@@ -156,12 +134,12 @@
     </div>
 </template>
 
+<script src="js/overlay.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/clicks.js"></script>
 <script src="js/click-money-logic.js"></script>
 <script src="js/improvement-generator.js"></script>
-<script src="js/level.js"></script>
 </body>
 
 </html>
