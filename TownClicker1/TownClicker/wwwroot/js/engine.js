@@ -564,24 +564,22 @@ class SeedRandom {
 let builder;
 let buildingsData;
 let buildingsTextures;
+let citySeed;
 async function init() {
   buildingsData = await (await fetch("market/upgrades")).json();
   buildingsData = [...buildingsData].sort((a, b) => a.id - b.id);
   buildingsTextures = await (await fetch("data/buildings.json")).json();
+  citySeed = (await (await fetch("api/Statistics/username")).json()).userName;
   const width = (CITY_RADIUS * 2 + 1) * (CHUNK_WIDTH + 1) + BOUNDS_SIZE * 2 + 1;
   const height = (CITY_RADIUS * 2 + 1) * (CHUNK_HEIGHT + 1) + BOUNDS_SIZE * 2 + 1;
   const engine = new GridEngine(width, height);
   const renderer = new CityRenderer(engine, Math.floor(width / 2) - Math.ceil((CHUNK_WIDTH + 1) / 2), Math.floor(height / 2) - Math.ceil((CHUNK_HEIGHT + 1) / 2));
-  builder = new CityBuilder(buildingsData, buildingsTextures, renderer, "SEED", CITY_RADIUS, BOUNDS_SIZE);
+  builder = new CityBuilder(buildingsData, buildingsTextures, renderer, citySeed, CITY_RADIUS, BOUNDS_SIZE);
   const levels = await (await fetch("market")).json();
   for (const { upgradeId, level } of levels) {
     for (let i = 0; i < level; i++) {
       builder.addBuilding(upgradeId);
     }
   }
-  /*setInterval(() => {
-    const rndId = 13 - Math.floor(Math.pow(Math.random() * Math.pow(14, 4), 1 / 4));
-    builder.addBuilding(rndId);
-  }, 10);*/
 }
 init();

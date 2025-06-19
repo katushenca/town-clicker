@@ -15,6 +15,16 @@ public class StatisticsController(ApplicationDbContext context, UserManager<User
     private readonly ApplicationDbContext _context = context;
     private readonly UserManager<User> _userManager = userManager;
 
+    [HttpGet("username")]
+    public async Task<IActionResult> GetUserName()
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+            return NotFound("User not found.");
+        return Ok(new { user.UserName });
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetStatistics()
     {
