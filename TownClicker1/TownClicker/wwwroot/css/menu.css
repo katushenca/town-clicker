@@ -68,7 +68,7 @@
     box-sizing: border-box;
 }
 
-.market-item:hover {
+.market-item-available:hover {
     transform: scale(1.1);
     cursor: pointer;
 }

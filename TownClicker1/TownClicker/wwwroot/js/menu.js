@@ -75,6 +75,7 @@ async function marketMenu() {
       item.querySelector('.market-item-cost-value').style.display = 'none';
       item.querySelector('.market-item-info').style.display = 'none';
     } else {
+      item.classList.add('market-item-available');
       item.querySelector('.market-item-level-required').style.display = 'none';
     }
     item.addEventListener('click', () => buyBuilding(building.id));
@@ -105,6 +106,7 @@ async function buyBuilding(id) {
   for (let i = 1; i <= currentUserLevel; i++) {
     const newBuildings = document.getElementsByClassName(`market-item-user-level-${i}`);
     for (const newBuilding of newBuildings) {
+      newBuilding.classList.add('market-item-available');
       newBuilding.querySelector('.market-item-img').classList.remove('market-item-img-level-required');
       newBuilding.querySelector('.market-item-cost-value').style.display = 'block';
       newBuilding.querySelector('.market-item-info').style.display = 'block';
