@@ -1,7 +1,6 @@
 ﻿// Локальные переменные
 let button = document.querySelector('.click-button');
-let counterElement = document.getElementById('click-count');
-let moneyElement = document.getElementById('coin-count');
+let moneyElement = document.getElementById('money-count');
 let totalClicks = 0;
 let coinBalance = 0;
 let unsavedClicks = 0;
@@ -43,7 +42,7 @@ async function sendUpdateToServer() {
     if (unsavedClicks === 0 && unsavedCoins === 0) return;
 
     try {
-        const response = await fetch('http://localhost:5045/api/Statistics', {
+        const response = await fetch('api/Statistics', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -82,27 +81,12 @@ window.addEventListener('beforeunload', (event) => {
 // Загрузка начальных данных при старте
 async function loadInitialData() {
     try {
-        const response = await fetch('http://localhost:5045/api/Statistics/');
+        const response = await fetch('api/Statistics');
         const data = await response.json();
-        totalClicks = data.totalClicks;
-        coinBalance = data.coinBalance;
+        totalClicks = data.clicks;
+        coinBalance = data.money;
     } catch (error) {
         console.error('Ошибка при загрузке статистики:', error);
-    }
-}
-
-async function loadBalance() {
-    try {
-        const clicks = document.getElementById('coin-count');
-        const response = await fetch('http://localhost:5045/api/Statistics');
-        if (!response.ok) {
-            throw new Error('Ошибка HTTP: ' + response.status);
-        }
-        const money = await (await response.json())['coins'];
-        clicks.textContent = money;
-        console.log('Init coins', money)
-    } catch (error) {
-        console.error('Ошибка:', error);
     }
 }
 

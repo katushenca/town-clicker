@@ -75,6 +75,7 @@ async function marketMenu() {
       item.querySelector('.market-item-cost-value').style.display = 'none';
       item.querySelector('.market-item-info').style.display = 'none';
     } else {
+      item.classList.add('market-item-available');
       item.querySelector('.market-item-level-required').style.display = 'none';
     }
     item.addEventListener('click', () => buyBuilding(building.id));
@@ -83,33 +84,33 @@ async function marketMenu() {
 }
 
 async function buyBuilding(id) {
-  const response = await fetch(`market?upgradeId=${id}`, {
-    method: "POST"
-  });
-  if (response.ok) {
-    const building = buildingsData.find(b => b.id === id);
-    const level = (marketItemLevels[id] || 0) + 1;
-    marketItemLevels[id] = level;
-    const item = document.getElementById(`market-item-${id}`);
-    item.querySelector('.market-item-level-value').textContent = level;
-    item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
-    item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
-    item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
-    builder.addBuilding(id);
-    const json = await response.json();
-    document.getElementById('coin-count').textContent = json.money;
-    document.getElementById('click-count').textContent = json.popularity;
-    const isLevelUp = await updateLevel(json.popularity);
-    if (isLevelUp) {
-      for (let i = 1; i <= currentUserLevel; i++) {
-        const newBuildings = document.getElementsByClassName(`market-item-user-level-${i}`);
-        for (const newBuilding of newBuildings) {
-          newBuilding.querySelector('.market-item-img').classList.remove('market-item-img-level-required');
-          newBuilding.querySelector('.market-item-cost-value').style.display = 'block';
-          newBuilding.querySelector('.market-item-info').style.display = 'block';
-          newBuilding.querySelector('.market-item-level-required').style.display = 'none';
-        }
-      }
+  const response = await fetch(`market?upgradeId=${id}`, { method: "POST" });
+  if (!response.ok) {
+    return;
+  }
+  const building = buildingsData.find(b => b.id === id);
+  const level = (marketItemLevels[id] || 0) + 1;
+  marketItemLevels[id] = level;
+  const item = document.getElementById(`market-item-${id}`);
+  item.querySelector('.market-item-level-value').textContent = level;
+  item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
+  item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
+  item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
+  builder.addBuilding(id);
+  const json = await response.json();
+  updateMoney(json.money);
+  const isLevelUp = updatePopulationAndLevel(json.popularity);
+  if (!isLevelUp) {
+    return;
+  }
+  for (let i = 1; i <= currentUserLevel; i++) {
+    const newBuildings = document.getElementsByClassName(`market-item-user-level-${i}`);
+    for (const newBuilding of newBuildings) {
+      newBuilding.classList.add('market-item-available');
+      newBuilding.querySelector('.market-item-img').classList.remove('market-item-img-level-required');
+      newBuilding.querySelector('.market-item-cost-value').style.display = 'block';
+      newBuilding.querySelector('.market-item-info').style.display = 'block';
+      newBuilding.querySelector('.market-item-level-required').style.display = 'none';
     }
   }
 }
@@ -295,7 +296,7 @@ function showUpgradeNotification(improvementData) {
 }
 
 async function reload() {
-  await window.addEventListener("load", function () {
+  window.addEventListener("load", function () {
     checkUpgradeStatus();
     checkAutoClickUpgrade();
   });
