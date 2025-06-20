@@ -106,48 +106,110 @@ public class Seed
         }
     
     public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
+    {
+        using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
         {
-            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            //Roles
+            var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+            if (!await roleManager.RoleExistsAsync(UserRoles.User))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+
+            //Users
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            var adminUserEmail = "shutenko.katya@bk.ru";
+
+            var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
+            if (adminUser == null)
             {
-                //Roles
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-                if (!await roleManager.RoleExistsAsync(UserRoles.User))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
-
-                //Users
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                var adminUserEmail = "shutenko.katya@bk.ru";
-
-                var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
-                if (adminUser == null)
+                var newAdminUser = new User()
                 {
-                    var newAdminUser = new User()
-                    {
-                        UserName = "admin",
-                        Email = adminUserEmail,
-                        EmailConfirmed = true,
-                    };
-                    await userManager.CreateAsync(newAdminUser, "Coding@1234?");
-                    await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
-                }
+                    UserName = "admin",
+                    Email = adminUserEmail,
+                    EmailConfirmed = true,
+                };
+                await userManager.CreateAsync(newAdminUser, "Coding@1234?");
+                await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
+            }
 
-                string appUserEmail = "user@mail.ru";
+            string appUserEmail = "user@mail.ru";
 
-                var appUser = await userManager.FindByEmailAsync(appUserEmail);
-                if (appUser == null)
+            var appUser = await userManager.FindByEmailAsync(appUserEmail);
+            if (appUser == null)
+            {
+                var newAppUser = new User()
                 {
-                    var newAppUser = new User()
-                    {
-                        UserName = "player",
-                        Email = appUserEmail,
-                        EmailConfirmed = true,
-                    };
-                    await userManager.CreateAsync(newAppUser, "Coding@1234?");
-                    await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
-                }
+                    UserName = "player",
+                    Email = appUserEmail,
+                    EmailConfirmed = true,
+                };
+                await userManager.CreateAsync(newAppUser, "Coding@1234?");
+                await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
             }
         }
+    }
+
+    public static void SeedImprovements(IApplicationBuilder applicationBuilder)
+    {
+        using var scope = applicationBuilder.ApplicationServices.CreateScope();       
+        var _context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        if (!_context.Skins.Any())
+        {
+            _context.Skins.AddRange(new List<Skin>()
+            {
+                new()
+                {
+                    Id = 1,
+                    Name = "увеличение прибыли X2",
+                    ImageUrl = "/images/improvements/x2.png",
+                    DurationSeconds = 60,
+                },
+                new()
+                {
+                    Id = 2,
+                    Name = "автокликер на минуту",
+                    ImageUrl = "/images/improvements/auto-clicker.png",
+                    DurationSeconds = 60,
+                },
+                new()
+                {
+                    Id = 3,
+                    Name = "увеличение прибыли X4",
+                    ImageUrl = "/images/improvements/x4.png",
+                    DurationSeconds = 60,
+                },
+                new()
+                {
+                    Id = 4,
+                    Name = "увеличение прибыли X8",
+                    ImageUrl = "/images/improvements/x8.png",
+                    DurationSeconds = 60,
+                },
+                new()
+                {
+                    Id = 5,
+                    Name = "+100 к монетам",
+                    ImageUrl = "/images/improvements/bonus_100.png",
+                    DurationSeconds = 2,
+                },
+                new()
+                {
+                    Id = 6,
+                    Name = "+200 к монетам",
+                    ImageUrl = "/images/improvements/bonus_200.png",
+                    DurationSeconds = 2,
+                },
+                new()
+                {
+                    Id = 7,
+                    Name = "+500 к монетам",
+                    ImageUrl = "/images/improvements/bonus_500.png",
+                    DurationSeconds = 2,
+                }
+            });
+            _context.SaveChanges();
+        }
+    }
 }
