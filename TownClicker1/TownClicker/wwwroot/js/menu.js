@@ -340,4 +340,13 @@ function toggleProfileMenu() {
   menu.classList.toggle('hidden');
 }
 
+// Анимация кнопки
+document.querySelectorAll('.click-button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.remove('clicked');
+    void btn.offsetWidth;
+    btn.classList.add('clicked');
+  });
+});
+
 reload()
