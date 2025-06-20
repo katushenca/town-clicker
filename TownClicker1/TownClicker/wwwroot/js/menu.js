@@ -74,6 +74,8 @@ async function marketMenu() {
       item.querySelector('.market-item-img').classList.add('market-item-img-level-required');
       item.querySelector('.market-item-cost-value').style.display = 'none';
       item.querySelector('.market-item-info').style.display = 'none';
+      item.querySelector('.cost').style.display = 'none';
+      item.querySelector('.population').style.display = 'none';
     } else {
       item.classList.add('market-item-available');
       item.querySelector('.market-item-level-required').style.display = 'none';
@@ -336,10 +338,6 @@ async function checkAutoClickUpgrade() {
 function toggleProfileMenu() {
   const menu = document.getElementById('profile-menu');
   menu.classList.toggle('hidden');
-}
-
-function changeAccount() {
-  
 }
 
 reload()

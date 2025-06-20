@@ -575,3 +575,19 @@ button.improvement {
     font-size: 14px;
     color: #ffffff;
 }
+
+.cost, .population {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.population {
+    margin-top: 3px;
+}
+
+.cost img, .population img {
+    width: 24px;
+    height: 24px;
+}
