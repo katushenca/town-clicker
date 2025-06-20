@@ -6,8 +6,6 @@ let unsavedClicks = 0;
 let unsavedCoins = 0;
 let coinsPerClick = 1;
 let lastUpdateTime = 0;
-let bonus = 0;
-
 // Конфигурация
 const UPDATE_INTERVAL = 5000; // 20 секунд
 const MIN_CLICKS_FOR_UPDATE = 0;
@@ -52,7 +50,7 @@ async function sendUpdateToServer() {
             })
         });
     } catch (error) {
-        console.error('Ошибка при обновлении статистики:', error);
+        //console.error('Ошибка при обновлении статистики:', error);
     }
 }
 
@@ -85,7 +83,7 @@ async function loadInitialData() {
         totalClicks = data.clicks;
         coinBalance = data.money;
     } catch (error) {
-        console.error('Ошибка при загрузке статистики:', error);
+        //console.error('Ошибка при загрузке статистики:', error);
     }
 }
 
@@ -93,7 +91,6 @@ async function checkIncrementUpgrades() {
     try {
         const res = await fetch('api/upgrade/status');
         const upgradeInfo = await res.json();
-        console.log('upgradeInfo', upgradeInfo);
         if (!upgradeInfo.isActive)
             return 1;
         if (upgradeInfo.id === 1) {
@@ -106,7 +103,7 @@ async function checkIncrementUpgrades() {
             return 8;
         }
     } catch (error) {
-        console.error(error);
+        //console.error(error);
     }
     return 1;
 }

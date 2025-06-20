@@ -1,3 +1,10 @@
+const bonusValues = {
+  5: 100,
+  6: 200,
+  7: 500,
+};
+noTimeImprovements = [5, 6, 7]
+
 const menuOverlay = document.getElementById("menu-overlay");
 const menuTitleText = document.getElementById("menu-title-text");
 
@@ -141,8 +148,8 @@ async function loadInventory(userName) {
   
   const items = await response.json();
   const grid = document.getElementById('inventory-grid');
-  const buttonClass = activeUpgrade.isActive && !window.noTimeImprovements.includes(Number(activeUpgrade.id))  ? 'improvement disabled' : 'improvement';
-  const disabledAttr = activeUpgrade.isActive && !window.noTimeImprovements.includes(Number(activeUpgrade.id)) ? 'disabled' : '';
+  const buttonClass = activeUpgrade.isActive && !noTimeImprovements.includes(Number(activeUpgrade.id))  ? 'improvement disabled' : 'improvement';
+  const disabledAttr = activeUpgrade.isActive && !noTimeImprovements.includes(Number(activeUpgrade.id)) ? 'disabled' : '';
   items.forEach(item => {
     const div = document.createElement('div');
     div.className = 'inventory-item';
@@ -325,11 +332,11 @@ async function checkAutoClickUpgrade() {
       }, duration);
     }
     else if (upgradeInfo.isActive && (upgradeInfo.id === 5 || upgradeInfo.id === 6 || upgradeInfo.id === 7)) {
-      await handleClick(window.bonusValues[upgradeInfo.id]);
+      await handleClick(bonusValues[upgradeInfo.id]);
     }
 
   } catch (error) {
-    console.error(error);
+    //console.error(error);
   }
 }
 
