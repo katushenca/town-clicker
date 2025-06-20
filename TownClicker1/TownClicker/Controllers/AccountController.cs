@@ -44,10 +44,8 @@ public class AccountController : Controller
                     return RedirectToAction("Index", "Home");   
                 }
             }
-            TempData["Error"] = "Неправильный логин или пароль";
-            return View(loginViewModel);
         }
-        TempData["Error"] = "Неправильный логин или пароль";
+        ModelState.AddModelError(string.Empty, "Неправильный логин или пароль");
         return View(loginViewModel);
     }
     
@@ -66,7 +64,13 @@ public class AccountController : Controller
         var user = await userManager.FindByEmailAsync(registerViewModel.Email);
         if (user != null)
         {
-            TempData["Error"] = "Пользователь с таким email уже создан";
+            ModelState.AddModelError(string.Empty, "Пользователь с таким email уже создан");
+            return View(registerViewModel);
+        }
+        var username = await userManager.FindByNameAsync(registerViewModel.Username);
+        if (username != null)
+        {
+            ModelState.AddModelError(string.Empty, "Пользователь с таким именем уже создан");
             return View(registerViewModel);
         }
 
@@ -97,6 +101,7 @@ public class AccountController : Controller
         {
             ModelState.AddModelError(string.Empty, error.Description);
         }
+        
         return View(registerViewModel);
     }
 

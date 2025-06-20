@@ -21,18 +21,19 @@
             <h2>Регистрация</h2>
         </p>
 
-        @if (TempData["Error"] != null)
+        @if(!ViewData.ModelState.IsValid)
         {
-            <div class="error-message">
-                <span><b>Sorry!</b> - @TempData["Error"] </span>
+            <div class="text-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p class="error-message">@error.ErrorMessage</p>
+                }
             </div>
         }
 
         <div>
             <div>
                 <form asp-action="Register">
-                    <div asp-validation-summary="ModelOnly"></div>
-
                     <div class="form-fields">
                         <label asp-for="Email"></label>
                         <input asp-for="Email"/>
@@ -60,9 +61,6 @@
                     </div>
                     <div class="bottom-links">
                         <a asp-controller="Account" asp-action="Login">Авторизация</a>
-                    </div>
-                    <div class="bottom-links">
-                        <a asp-controller="Account" asp-action="Logout">Выйти из аккаунта</a>
                     </div>
                 </form>
             </div>
