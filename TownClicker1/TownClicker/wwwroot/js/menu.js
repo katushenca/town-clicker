@@ -336,6 +336,8 @@ async function checkAutoClickUpgrade() {
 function toggleProfileMenu() {
   const menu = document.getElementById('profile-menu');
   menu.classList.toggle('hidden');
+  const arrowSpan = document.getElementById('profile-dropdown-arrow');
+  arrowSpan.textContent = arrowSpan.textContent == '▼' ? '▲' : '▼';
 }
 
 // Анимация кнопки
