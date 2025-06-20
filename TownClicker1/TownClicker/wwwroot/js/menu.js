@@ -66,7 +66,7 @@ async function marketMenu() {
     item.querySelector('.market-item-level-value').textContent = level;
     item.querySelector('.market-item-img').src = buildingsTextures.buildings[building.id].left[0];
     item.querySelector('.market-item-img').alt = building.name;
-    item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
+    item.querySelector('.market-item-cost-value').textContent = bigintToString(calcCost(building, level));
     item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
     item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
     item.querySelector('.market-item-level-required-value').textContent = building.levelRequired;
@@ -93,7 +93,7 @@ async function buyBuilding(id) {
   marketItemLevels[id] = level;
   const item = document.getElementById(`market-item-${id}`);
   item.querySelector('.market-item-level-value').textContent = level;
-  item.querySelector('.market-item-cost-value').textContent = calcCost(building, level);
+  item.querySelector('.market-item-cost-value').textContent = bigintToString(calcCost(building, level));
   item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
   item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
   builder.addBuilding(id);

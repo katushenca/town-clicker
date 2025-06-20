@@ -1,9 +1,24 @@
 ﻿let levelsData;
 let currentUserLevel = 0;
+let currentTotalMoney = 0;
 
 function updateMoney(money) {
+  currentTotalMoney = money;
   const moneyLabel = document.getElementById('money-count');
-  moneyLabel.textContent = money.toString();
+  moneyLabel.textContent = bigintToString(money);
+}
+
+const intValueStr = "KMBTqQsSO";
+function bigintToString(value) {
+  if (value < 1000) {
+    return value;
+  }
+  value /= 1000;
+  let n = 0;
+  for (; n + 1 < intValueStr.length && value >= 100; n++) {
+    value /= 1000;
+  }
+  return `${Math.round(value * 100) / 100}${intValueStr[n]}`;
 }
 
 function updatePopulationAndLevel(population) {
