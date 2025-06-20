@@ -72,8 +72,6 @@ async function marketMenu() {
     item.querySelector('.market-item-level-required-value').textContent = building.levelRequired;
     if (currentUserLevel < building.levelRequired) {
       item.querySelector('.market-item-img').classList.add('market-item-img-level-required');
-      item.querySelector('.market-item-cost-value').style.display = 'none';
-      item.querySelector('.market-item-info').style.display = 'none';
       item.querySelector('.cost').style.display = 'none';
       item.querySelector('.population').style.display = 'none';
     } else {
@@ -110,8 +108,8 @@ async function buyBuilding(id) {
     for (const newBuilding of newBuildings) {
       newBuilding.classList.add('market-item-available');
       newBuilding.querySelector('.market-item-img').classList.remove('market-item-img-level-required');
-      newBuilding.querySelector('.market-item-cost-value').style.display = 'block';
-      newBuilding.querySelector('.market-item-info').style.display = 'block';
+      newBuilding.querySelector('.cost').style.display = 'flex';
+      newBuilding.querySelector('.population').style.display = 'flex';
       newBuilding.querySelector('.market-item-level-required').style.display = 'none';
     }
   }
