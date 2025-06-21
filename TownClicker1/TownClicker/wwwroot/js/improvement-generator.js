@@ -1,38 +1,25 @@
-﻿window.bonusValues = {
-    5: 100,
-    6: 200,
-    7: 500,
+﻿import { improvements, improvementTime } from "./constants.js";
+
+
+function getRandomImprovementId() {
+    const ids = Object.keys(improvements).map(Number);
+    const randomIndex = Math.floor(Math.random() * ids.length);
+    return ids[randomIndex];
 }
 
-improvements = {
-    1: '/images/improvements/x2.png',
-    2: '/images/improvements/auto-clicker.png',
-    3: '/images/improvements/x4.png',
-    4: '/images/improvements/x8.png',
-    5: '/images/improvements/bonus_100.png',
-    6: '/images/improvements/bonus_200.png',
-    7: '/images/improvements/bonus_500.png',
-};
-
-window.noTimeImprovements = [5, 6, 7];
-
-function drawImprovement() {
+function getRandomBuilding() {
     const buildings = document.querySelectorAll("#building");
-    const randomBuilding = buildings[Math.floor(Math.random() * buildings.length)];
-    const currentParent = randomBuilding.closest('.sprite-container');
-    if (currentParent.querySelector("button.improve") !== null) {
-        return;
-    }
-    const min = 1;
-    const max = Object.keys(improvements).length;
-    const improvementId = Math.floor(Math.random() * (max - min + 1)) + min;
-    
-    const improve = document.createElement("button")
-    improve.classList.add("improve");
-    improve.style.backgroundImage = `url(${improvements[improvementId]})`;
-    currentParent.appendChild(improve);
-    
-    improve.addEventListener("click", (e) => {
+    if (buildings.length === 0) return null;
+    const index = Math.floor(Math.random() * buildings.length);
+    return buildings[index];
+}
+
+function createImproveButton(improvementId, onRemove) {
+    const button = document.createElement("button");
+    button.classList.add("improve");
+    button.style.backgroundImage = `url(${improvements[improvementId]})`;
+
+    button.addEventListener("click", () => {
         fetch('/api/upgrade/add', {
             method: 'POST',
             headers: {
@@ -40,11 +27,29 @@ function drawImprovement() {
             },
             body: JSON.stringify(improvementId)
         })
-            .then(function (resp) {
-                if (resp.ok)
-                    improve.remove();
-            })
-    })
+            .then((resp) => {
+                if (resp.ok) {
+                    onRemove(button);
+                }
+            });
+    });
+
+    return button;
 }
 
-setInterval(drawImprovement, 5_000);
+function drawImprovement() {
+    const building = getRandomBuilding();
+    if (!building) {
+        return;
+    }
+    const container = building.closest('.sprite-container');
+    if (!container || container.querySelector("button.improve")) {
+        return;
+    }
+
+    const improvementId = getRandomImprovementId();
+    const button = createImproveButton(improvementId, (b) => b.remove());
+    container.appendChild(button);
+}
+
+setInterval(drawImprovement, improvementTime);

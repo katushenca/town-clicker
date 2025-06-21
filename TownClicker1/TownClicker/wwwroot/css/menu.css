@@ -531,7 +531,9 @@ button.improvement {
     margin-top: -8px;
 }
 
-
+.menu-block:hover {
+    scale: 1.1;
+}
 
 .menu-block.change {
     display: flex;
@@ -547,9 +549,7 @@ button.improvement {
     border: 2px solid rgba(43, 55, 67, 0.73);
     
 }
-.menu-button-wrapper:hover {
-    scale: 1.1;
-}
+
 .menu-block.logout {
     display: flex;
     align-items: center;
