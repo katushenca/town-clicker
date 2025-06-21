@@ -53,4 +53,4 @@ async function init() {
   setTotalMoney(statistics.money);
   setPopulationAndLevel(statistics.popularity);
 }
-init();
+await init();
