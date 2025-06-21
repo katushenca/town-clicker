@@ -1,27 +1,28 @@
-﻿let levelsData;
-let currentUserLevel = 0;
-let currentTotalMoney = 0;
+﻿import { bigintToString } from "./helpers.js";
 
-function updateMoney(money) {
-  currentTotalMoney = money;
-  const moneyLabel = document.getElementById('money-count');
+let levelsData;
+
+export const overlayState = {
+  totalMoney: 0,
+  level: 0,
+  population: 0
+};
+
+const moneyLabel = document.getElementById('money-count');
+export function setTotalMoney(money) {
+  overlayState.totalMoney = money;
   moneyLabel.textContent = bigintToString(money);
 }
 
-const intValueStr = "KMBTqQsSO";
-function bigintToString(value) {
-  if (value < 1000) {
-    return value;
-  }
-  value /= 1000;
-  let n = 0;
-  for (; n + 1 < intValueStr.length && value >= 100; n++) {
-    value /= 1000;
-  }
-  return `${Math.round(value * 100) / 100}${intValueStr[n]}`;
+export function addMoney(money) {
+  setTotalMoney(overlayState.totalMoney + money);
 }
 
-function updatePopulationAndLevel(population) {
+const populationLabel = document.getElementById('population-count');
+const levelLabel = document.getElementById("level-value");
+const levelProgress = document.getElementById("progress-bar-value");
+export function setPopulationAndLevel(population) {
+  overlayState.population = population;
   let level = levelsData.findIndex((value) => value > population);
   if (level === -1) {
     level = levelsData.length - 1;
@@ -31,15 +32,12 @@ function updatePopulationAndLevel(population) {
   }
   const nextLevelPopulation = levelsData[level + 1] || levelsData[level];
 
-  const populationLabel = document.getElementById('population-count');
   populationLabel.textContent = population;
-  const levelLabel = document.getElementById("level-value");
   levelLabel.textContent = level.toString();
-  const levelProgress = document.getElementById("progress-bar-value");
   levelProgress.style.width = `${Math.min((population / nextLevelPopulation) * 100, 100)}%`;
 
-  const isLevelUp = currentUserLevel < level;
-  currentUserLevel = level;
+  const isLevelUp = overlayState.level < level;
+  overlayState.level = level;
   return isLevelUp;
 }
 
@@ -47,7 +45,7 @@ async function init() {
   levelsData = await (await fetch("market/levels")).json();
 
   const statistics = await (await fetch('api/Statistics')).json();
-  updateMoney(statistics.money);
-  updatePopulationAndLevel(statistics.popularity);
+  setTotalMoney(statistics.money);
+  setPopulationAndLevel(statistics.popularity);
 }
 init();

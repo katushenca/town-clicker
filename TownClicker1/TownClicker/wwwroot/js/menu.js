@@ -1,19 +1,24 @@
+import { builder, buildingsData, buildingsTextures } from './engine.js';
+import { overlayState, setTotalMoney, setPopulationAndLevel } from './overlay.js';
+import { bigintToString } from './helpers.js';
+
 const bonusValues = {
   5: 100,
   6: 200,
   7: 500,
 };
-noTimeImprovements = [5, 6, 7]
+const noTimeImprovements = [5, 6, 7];
 
 const menuOverlay = document.getElementById("menu-overlay");
 const menuTitleText = document.getElementById("menu-title-text");
 
 
+const infoContainer = document.getElementById("info-container");
+const infoTitle = document.getElementById("info-title");
+const infoText = document.getElementById("info-text");
+
 async function openMenu(id, userName=null) {
   menuTitleText.textContent = id;
-  const infoContainer = document.getElementById("info-container");
-  const infoTitle = document.getElementById("info-title");
-  const infoText = document.getElementById("info-text");
 
   const tooltipData = {
     'Магазин': {
@@ -45,8 +50,9 @@ async function openMenu(id, userName=null) {
     await openTab(userName);
   }
 }
+window.openMenu = openMenu;
 
-function closeMenu() {
+window.closeMenu = function closeMenu() {
   menuOverlay.style.display = 'none';
   document.getElementById('inventory-grid').style.display = 'none';
   document.getElementById('market-list').style.display = 'none';
@@ -54,6 +60,7 @@ function closeMenu() {
   document.getElementById('market-list').innerHTML = '';
   resetRank();
 }
+window.closeMenu = closeMenu;
 
 let marketItemLevels;
 async function marketMenu() {
@@ -77,7 +84,7 @@ async function marketMenu() {
     item.querySelector('.market-item-info-current-value').textContent = calcEffect(building, level);
     item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
     item.querySelector('.market-item-level-required-value').textContent = building.levelRequired;
-    if (currentUserLevel < building.levelRequired) {
+    if (overlayState.level < building.levelRequired) {
       item.querySelector('.market-item-img').classList.add('market-item-img-level-required');
       item.querySelector('.cost').style.display = 'none';
       item.querySelector('.population').style.display = 'none';
@@ -105,12 +112,12 @@ async function buyBuilding(id) {
   item.querySelector('.market-item-info-next-value').textContent = calcEffect(building, level + 1);
   builder.addBuilding(id);
   const json = await response.json();
-  updateMoney(json.money);
-  const isLevelUp = updatePopulationAndLevel(json.popularity);
+  setTotalMoney(json.money);
+  const isLevelUp = setPopulationAndLevel(json.popularity);
   if (!isLevelUp) {
     return;
   }
-  for (let i = 1; i <= currentUserLevel; i++) {
+  for (let i = 1; i <= overlayState.level; i++) {
     const newBuildings = document.getElementsByClassName(`market-item-user-level-${i}`);
     for (const newBuilding of newBuildings) {
       newBuilding.classList.add('market-item-available');
@@ -186,6 +193,7 @@ async function openTab(userName, tableId='popularity') {
   document.getElementById(`${tableId}-tab`).classList.add('active');
   await loadRank(userName, tableId);
 }
+window.openTab = openTab;
 
 async function loadRank(userName, type='popularity') {
   const response = await fetch(`/api/rank/statistics/${type}`);
@@ -266,6 +274,7 @@ async function useImprovement(buttonElement, username, skinId) {
   }
   closeMenu();
 }
+window.useImprovement = useImprovement;
 
 function showUpgradeNotification(improvementData) {
   const div = document.getElementById('header-center')
@@ -346,6 +355,7 @@ function toggleProfileMenu() {
   const arrowSpan = document.getElementById('profile-dropdown-arrow');
   arrowSpan.textContent = arrowSpan.textContent == '▼' ? '▲' : '▼';
 }
+window.toggleProfileMenu = toggleProfileMenu;
 
 // Анимация кнопки
 document.querySelectorAll('.click-button').forEach(btn => {

@@ -1,4 +1,6 @@
-﻿// Локальные переменные
+﻿import { addMoney } from "./overlay.js";
+
+// Локальные переменные
 let button = document.querySelector('.click-button');
 let totalClicks = 0;
 let coinBalance = 0;
@@ -18,7 +20,7 @@ async function handleClick(bonus = 1) {
     unsavedClicks++;
     coinBalance += coinsPerClick * extra + (bonus - 1);
     unsavedCoins += coinsPerClick * extra + (bonus - 1);
-    updateMoney(currentTotalMoney + unsavedCoins);
+    addMoney(unsavedCoins);
     // Проверяем, нужно ли отправить обновление
     if (unsavedClicks >= MIN_CLICKS_FOR_UPDATE || unsavedCoins >= MIN_COINS_FOR_UPDATE) {
         try {
