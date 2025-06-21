@@ -1,10 +1,16 @@
-﻿import { improvements, improvementTime } from "./constants.js";
+﻿import { improvements, improvementTime, weightedImprovements} from "./constants.js";
 
 
 function getRandomImprovementId() {
-    const ids = Object.keys(improvements).map(Number);
-    const randomIndex = Math.floor(Math.random() * ids.length);
-    return ids[randomIndex];
+    const rnd = Math.random() * 100;
+    let totalSum = 0;
+    for (const item of weightedImprovements) {
+        totalSum += item.weight;
+        if (rnd < totalSum) {
+            return item.id;
+        }
+    }
+    return weightedImprovements[0].id;
 }
 
 function getRandomBuilding() {
