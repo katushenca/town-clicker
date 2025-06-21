@@ -1,6 +1,6 @@
-import { CityBuilder } from "./CityBuilder.js";
-import { CityRenderer } from "./CityRenderer.js";
-import { GridEngine } from "./GridEngine.js";
+import { CityBuilder } from "./engine/CityBuilder.js";
+import { CityRenderer } from "./engine/CityRenderer.js";
+import { GridEngine } from "./engine/GridEngine.js";
 import { overlayState } from "./overlay.js";
 
 const CHUNK_WIDTH = 3;
