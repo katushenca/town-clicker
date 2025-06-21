@@ -9,7 +9,7 @@ let unsavedCoins = 0;
 let coinsPerClick = 1;
 let lastUpdateTime = 0;
 
-const MONEY_PER_CLICK_POPULATION_FACTOR = 0.1;
+const MONEY_PER_CLICK_POPULATION_FACTOR = 0.2;
 
 // Конфигурация
 const UPDATE_INTERVAL = 5000; // 20 секунд
