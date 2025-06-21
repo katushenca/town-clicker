@@ -152,7 +152,7 @@ footer {
   animation: spring-click 0.2s ease-out;
 }
 
-#money-count, #population-count {
+#money-count, #population-count, .level-bar {
   display: inline-block;
   color: rgba(74, 98, 119, 0.73);
   font-size: 22px;
@@ -162,6 +162,13 @@ footer {
 
 #population-count {
   margin-left: 10px;
+}
+
+.lvl {
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 8px;
+  font-size: 20px;
 }
 
 @media (max-width: 600px) {}

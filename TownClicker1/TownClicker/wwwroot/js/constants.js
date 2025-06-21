@@ -8,4 +8,4 @@
     7: '/images/improvements/bonus_500.png',
 };
 
-export const improvementTime = 5_000;
+export const improvementTime = 30_000;

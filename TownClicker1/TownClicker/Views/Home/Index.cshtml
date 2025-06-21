@@ -26,7 +26,7 @@
 <header>
     <div class="header-left">
         <div class="header-left-top">
-            <div class="level-box"><span id="level-value">0</span></div>
+            <div class="level-box"><span id="level-value">0</span><span class="lvl">lvl</span></div>
             <span class="resources-item">
                 <img class="resources-icon" src="images/coin.png" alt="Moneys" width="24">
                 <span id="money-count">0</span>
@@ -38,6 +38,7 @@
         </div>
         <div class="progress-bar">
             <div class="progress-bar-progress" id="progress-bar-value" style="width:0%"></div>
+            <span class="level-bar"></span>
         </div>
     </div>
     <div class="header-center" id="header-center" style="display: none">
@@ -59,13 +60,6 @@
 
             <div class="profile-menu hidden" id="profile-menu">
                 <div class="menu-button-wrapper">
-                    <a class="menu-block change" asp-controller="Account" asp-action="Login">
-                        <!-- иконка обновления -->
-                        <img class="user-icon" src="images/change_account.png"/>
-                        <span class="profile-text">Сменить аккаунт</span>
-                    </a>
-                </div>
-                <div class="menu-button-wrapper">
                     <a class="menu-block logout" asp-controller="Account" asp-action="Logout">
                         <img class="user-icon" src="images/logout.png"/>
                         <span class="profile-text">Выйти</span>
@@ -82,7 +76,7 @@
             <img class="menu-icon" src="images/shop.png" alt="Shop" onclick="openMenu('Магазин')">
         </div>
         <div class="footer-row">
-            <img class="menu-icon" src="images/chest.png" alt="Chest" onclick="openMenu('Инвентарь')">
+            <img class="menu-icon" src="images/backpack.png" alt="Chest" onclick="openMenu('Инвентарь')">
         </div>
     </div>
     <button class="click-button">ТЫК</button>
