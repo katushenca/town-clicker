@@ -14,7 +14,7 @@ const MIN_CLICKS_FOR_UPDATE = 0;
 const MIN_COINS_FOR_UPDATE = 0;
 
 // Обработчик клика
-async function handleClick(bonus = 1) {
+export async function handleClick(bonus = 1) {
     const extra = await checkIncrementUpgrades();
     totalClicks++;
     unsavedClicks++;

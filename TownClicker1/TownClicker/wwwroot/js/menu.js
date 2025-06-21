@@ -1,6 +1,7 @@
 import { builder, buildingsData, buildingsTextures } from './engine.js';
 import { overlayState, setTotalMoney, setPopulationAndLevel } from './overlay.js';
 import { bigintToString } from './helpers.js';
+import { handleClick } from './click-money-logic.js';
 
 const bonusValues = {
   5: 100,
@@ -17,7 +18,7 @@ const infoContainer = document.getElementById("info-container");
 const infoTitle = document.getElementById("info-title");
 const infoText = document.getElementById("info-text");
 
-async function openMenu(id, userName=null) {
+async function openMenu(id) {
   menuTitleText.textContent = id;
 
   const tooltipData = {
@@ -44,10 +45,10 @@ async function openMenu(id, userName=null) {
     await marketMenu();
   } else if (id === 'Инвентарь') {
     document.getElementById('inventory-grid').style.display = 'flex';
-    await loadInventory(userName);
+    await loadInventory();
   } else if (id === 'Рейтинг') {
     document.getElementById('tabs').style.display = 'flex';
-    await openTab(userName);
+    await openTab();
   }
 }
 window.openMenu = openMenu;
@@ -148,8 +149,8 @@ function calcEffect(building, level) {
   }
 }
 
-async function loadInventory(userName) {
-  const response = await fetch(`/api/inventory/${userName}`);
+async function loadInventory() {
+  const response = await fetch(`/api/inventory/${overlayState.username}`);
   const upgradeResponse = await fetch('/api/upgrade/status');
   const activeUpgrade = await upgradeResponse.json();
   
@@ -161,7 +162,7 @@ async function loadInventory(userName) {
     const div = document.createElement('div');
     div.className = 'inventory-item';
     div.innerHTML = `
-        <button class="${buttonClass}"  ${disabledAttr} onclick="useImprovement(this, '${userName}', ${item.skinId})">
+        <button class="${buttonClass}"  ${disabledAttr} onclick="useImprovement(this, ${item.skinId})">
          <img src="${item.url}" alt="${item.skinName}">
             <div class="item-name">${item.skinName}</div>
         </button>
@@ -181,7 +182,7 @@ function resetRank() {
   document.getElementById('tabs').style.display = 'none';
 }
 
-async function openTab(userName, tableId='popularity') {
+async function openTab(tableId='popularity') {
   if (document.getElementById(`${tableId}-tab`).classList.contains('active')) {
     return;
   }
@@ -191,15 +192,15 @@ async function openTab(userName, tableId='popularity') {
   document.getElementById(tableId).style.display = 'block';
   document.getElementById(`${other}-tab`).classList.remove('active');
   document.getElementById(`${tableId}-tab`).classList.add('active');
-  await loadRank(userName, tableId);
+  await loadRank(tableId);
 }
 window.openTab = openTab;
 
-async function loadRank(userName, type='popularity') {
+async function loadRank(type='popularity') {
   const response = await fetch(`/api/rank/statistics/${type}`);
   const items = await response.json();
 
-  const person = await fetch(`/api/rank/statistics/${userName}`);
+  const person = await fetch(`/api/rank/statistics/${overlayState.username}`);
   const person_items =  await person.json();
   let user_place = '-';
   
@@ -240,7 +241,7 @@ async function loadRank(userName, type='popularity') {
   const placeFooterCell = document.createElement('td');
   placeFooterCell.textContent = user_place;
   const nameFooterCell = document.createElement('td');
-  nameFooterCell.textContent = userName;
+  nameFooterCell.textContent = overlayState.username;
   const dataFooterCell = document.createElement('td');
   dataFooterCell.textContent = type === 'popularity' ? person_items.popularity : person_items.clicks;
   footerRow.appendChild(placeFooterCell);
@@ -262,9 +263,9 @@ async function animateItems(){
   });
 }
 
-async function useImprovement(buttonElement, username, skinId) {
+async function useImprovement(buttonElement, skinId) {
   buttonElement.closest('.inventory-item')?.remove();
-  const response = await fetch(`/api/inventory/${username}/${skinId}`);
+  const response = await fetch(`/api/inventory/${overlayState.username}/${skinId}`);
   const improvementData = await response.json();
   if (skinId === 2 || skinId === 5  || skinId === 6 || skinId === 7) {
     await checkAutoClickUpgrade()

@@ -3,6 +3,7 @@
 let levelsData;
 
 export const overlayState = {
+  username: "",
   totalMoney: 0,
   level: 0,
   population: 0
@@ -44,6 +45,10 @@ export function setPopulationAndLevel(population) {
 async function init() {
   levelsData = await (await fetch("market/levels")).json();
 
+  const username = (await (await fetch("api/Statistics/username")).json()).userName;
+  overlayState.username = username;
+  const usernameLabel = document.getElementById("username-value");
+  usernameLabel.textContent = username;
   const statistics = await (await fetch('api/Statistics')).json();
   setTotalMoney(statistics.money);
   setPopulationAndLevel(statistics.popularity);
