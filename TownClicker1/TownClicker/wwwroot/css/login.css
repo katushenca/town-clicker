@@ -73,7 +73,6 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
 .form-fields input[type="email"],
 .form-fields input[type="password"],
 .form-fields input[type="text"] {
@@ -96,7 +95,6 @@
     outline: none;
     box-shadow: 0 0 0 3px rgba(74, 98, 119, 0.25);
 }
-
 
 .form-fields .field-validation {
     color: red;
@@ -136,7 +134,6 @@
 .cancel-button:hover {
     scale: 1.1;
 }
-
 
 .bottom-links {
     margin-top: 20px;
