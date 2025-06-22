@@ -14,6 +14,8 @@ services:
 
   db:
     image: postgres:15
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: TownClicker
       POSTGRES_USER: postgres
