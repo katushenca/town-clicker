@@ -1,0 +1,133 @@
+﻿.rating-table {
+    width: 70%;
+    height: 60vh;
+    border-collapse: collapse;
+    margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.rating-table thead,
+.rating-table tbody,
+.rating-table tfoot {
+    width: 100%;
+}
+
+.rating-table thead {
+    position: sticky;
+    top: 0;
+}
+
+.rating-table tfoot {
+    position: sticky;
+    bottom: 0;
+}
+
+.rating-table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.rating-table th,
+.rating-table td {
+    padding: 12px 10px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rating-table th {
+    background-color: #6D8FAB;
+    color: white;
+    font-size: 16px;
+}
+
+.rating-table td {
+    border-bottom: 1px solid #D9D9D9;
+    background-color: rgba(255, 234, 196, 0.7);
+}
+
+.rating-table tr:hover td {
+    background-color: #FFEAC4;
+    transform: scale(1.01);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.rating-table::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rating-table::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.rating-table::-webkit-scrollbar-thumb {
+    background: #6D8FAB;
+    border-radius: 4px;
+}
+
+.rating-table::-webkit-scrollbar-thumb:hover {
+    background: #5a7c99;
+}
+
+.tabs {
+    display: flex;
+    background-color: #FFEAC4;
+    border-radius: 4px 4px 0 0;
+    padding: 8px 8px 0 8px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background: #e0e0e0;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    border-radius: 4px 4px 0 0;
+    margin-right: 4px;
+    transition: all 0.3s ease;
+    position: relative;
+    top: 1px;
+    border: 1px solid #D9D9D9;
+    border-bottom: none;
+}
+
+.tab-button:hover {
+    background: #d0d0d0;
+}
+
+.tab-button.active {
+    background: #6D8FAB;
+    color: white;
+    font-weight: bold;
+    border-color: #5a7c99;
+    box-shadow: 0 2px 0 #6D8FAB;
+}
+
+.tab-button.active:hover {
+    background: #5a7c99;
+}
+
+.highlight {
+    background-color: #f0c575;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.user-footer {
+    background-color: #f0c575;
+    color: #2c3e50;
+    font-weight: bold;
+}
+.user-footer td {
+    border-top: 2px solid #6D8FAB;
+}

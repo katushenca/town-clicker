@@ -1,0 +1,177 @@
+{
+  "buildings": {
+    "1": {
+      "left": [
+        "images/buildings/house_small_blue_a.png",
+        "images/buildings/house_small_purple_a.png",
+        "images/buildings/house_small_yellow_a.png"
+      ],
+      "right": [
+        "images/buildings/house_small_blue_b.png",
+        "images/buildings/house_small_purple_b.png",
+        "images/buildings/house_small_yellow_b.png"
+      ]
+    },
+    "2": {
+      "left": [
+        "images/buildings/house_medium_brown_a.png",
+        "images/buildings/house_medium_gray_a.png",
+        "images/buildings/house_medium_white_a.png"
+      ],
+      "right": [
+        "images/buildings/house_medium_brown_b.png",
+        "images/buildings/house_medium_gray_b.png",
+        "images/buildings/house_medium_white_b.png"
+      ]
+    },
+    "3": {
+      "left": [
+        "images/buildings/house_large_brown_a.png",
+        "images/buildings/house_large_green_a.png",
+        "images/buildings/house_large_teal_a.png"
+      ],
+      "right": [
+        "images/buildings/house_large_brown_b.png",
+        "images/buildings/house_large_green_b.png",
+        "images/buildings/house_large_teal_b.png"
+      ]
+    },
+    "4": {
+      "left": [
+        "images/buildings/building_small_brown_a.png",
+        "images/buildings/building_small_gray_a.png",
+        "images/buildings/building_small_red_a.png"
+      ],
+      "right": [
+        "images/buildings/building_small_brown_b.png",
+        "images/buildings/building_small_gray_b.png",
+        "images/buildings/building_small_red_b.png"
+      ]
+    },
+    "5": {
+      "left": [
+        "images/buildings/building_medium_blue_a.png",
+        "images/buildings/building_medium_green_a.png",
+        "images/buildings/building_medium_white_a.png"
+      ],
+      "right": [
+        "images/buildings/building_medium_blue_b.png",
+        "images/buildings/building_medium_green_b.png",
+        "images/buildings/building_medium_white_b.png"
+      ]
+    },
+    "6": {
+      "left": [
+        "images/buildings/building_tall_blue_a.png",
+        "images/buildings/building_tall_yellow_a.png"
+      ],
+      "right": [
+        "images/buildings/building_tall_blue_b.png",
+        "images/buildings/building_tall_yellow_b.png"
+      ]
+    },
+    "7": {
+      "left": [
+        "images/buildings/cafe_a.png"
+      ],
+      "right": [
+        "images/buildings/cafe_b.png"
+      ]
+    },
+    "8": {
+      "left": [
+        "images/buildings/hospital_a.png"
+      ],
+      "right": [
+        "images/buildings/hospital_b.png"
+      ]
+    },
+    "9": {
+      "left": [
+        "images/buildings/auto_shop_a.png"
+      ],
+      "right": [
+        "images/buildings/auto_shop_b.png"
+      ]
+    },
+    "10": {
+      "left": [
+        "images/buildings/fire_station_a.png"
+      ],
+      "right": [
+        "images/buildings/fire_station_b.png"
+      ]
+    },
+    "11": {
+      "left": [
+        "images/buildings/gas_station_a.png"
+      ],
+      "right": [
+        "images/buildings/gas_station_b.png"
+      ]
+    },
+    "12": {
+      "left": [
+        "images/buildings/police_station_a.png"
+      ],
+      "right": [
+        "images/buildings/police_station_b.png"
+      ]
+    },
+    "13": {
+      "left": [
+        "images/buildings/church_a.png"
+      ],
+      "right": [
+        "images/buildings/church_b.png"
+      ]
+    },
+    "14": {
+      "left": [
+        "images/buildings/warehouse_maroon_a.png",
+        "images/buildings/warehouse_orange_a.png"
+      ],
+      "right": [
+        "images/buildings/warehouse_maroon_b.png",
+        "images/buildings/warehouse_orange_b.png"
+      ]
+    }
+  },
+  "roads": {
+    "0000": "images/floors/road_xing.png",
+    "0001": "images/floors/road_end_c.png",
+    "0010": "images/floors/road_end_b.png",
+    "0011": "images/floors/road_corner_c.png",
+    "0100": "images/floors/road_end_a.png",
+    "0101": "images/floors/road_straight_a.png",
+    "0110": "images/floors/road_corner_b.png",
+    "0111": "images/floors/road_t_b.png",
+    "1000": "images/floors/road_end_d.png",
+    "1001": "images/floors/road_corner_d.png",
+    "1010": "images/floors/road_straight_b.png",
+    "1011": "images/floors/road_t_c.png",
+    "1100": "images/floors/road_corner_a.png",
+    "1101": "images/floors/road_t_d.png",
+    "1110": "images/floors/road_t_a.png",
+    "1111": "images/floors/road_xing.png"
+  },
+  "vegetations": {
+    "small": [
+      "images/vegetation/flowers_pink.png",
+      "images/vegetation/flowers_yellow.png",
+      "images/vegetation/weed_large_a.png",
+      "images/vegetation/weed_large_b.png",
+      "images/vegetation/weed_medium.png",
+      "images/vegetation/weed_small.png"
+    ],
+    "large": [
+      "images/vegetation/tree_common_01.png",
+      "images/vegetation/tree_damaged_1.png",
+      "images/vegetation/tree_damaged_2.png",
+      "images/vegetation/tree_damaged_3.png",
+      "images/vegetation/tree_pine_01.png",
+      "images/vegetation/tree_pine_02.png"
+    ]
+  },
+  "grass": "images/floors/ground_grass.png"
+}

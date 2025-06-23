@@ -1,0 +1,56 @@
+﻿import { bigintToString } from "./helpers.js";
+
+let levelsData;
+
+export const overlayState = {
+  username: "",
+  totalMoney: 0,
+  level: 0,
+  population: 0
+};
+
+const moneyLabel = document.getElementById('money-count');
+export function setTotalMoney(money) {
+  overlayState.totalMoney = money;
+  moneyLabel.textContent = bigintToString(money);
+}
+
+export function addMoney(money) {
+  setTotalMoney(overlayState.totalMoney + money);
+}
+
+const populationLabel = document.getElementById('population-count');
+const levelLabel = document.getElementById("level-value");
+const levelProgress = document.getElementById("progress-bar-value");
+export function setPopulationAndLevel(population) {
+  overlayState.population = population;
+  let level = levelsData.findIndex((value) => value > population);
+  if (level === -1) {
+    level = levelsData.length - 1;
+  }
+  else {
+    level--;
+  }
+  const nextLevelPopulation = levelsData[level + 1] || levelsData[level];
+
+  populationLabel.textContent = population;
+  levelLabel.textContent = level.toString();
+  levelProgress.style.width = `${Math.min((population / nextLevelPopulation) * 100, 100)}%`;
+
+  const isLevelUp = overlayState.level < level;
+  overlayState.level = level;
+  return isLevelUp;
+}
+
+async function init() {
+  levelsData = await (await fetch("market/levels")).json();
+
+  const username = (await (await fetch("api/Statistics/username")).json()).userName;
+  overlayState.username = username;
+  const usernameLabel = document.getElementById("username-value");
+  usernameLabel.textContent = username;
+  const statistics = await (await fetch('api/Statistics')).json();
+  setTotalMoney(statistics.money);
+  setPopulationAndLevel(statistics.popularity);
+}
+await init();

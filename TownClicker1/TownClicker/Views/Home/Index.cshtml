@@ -1,0 +1,159 @@
+@{
+    ViewData["Title"] = "TownClicker";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset='utf-8'>
+    <title>Town Clicker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' type='text/css' media='screen' href="css/main.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="css/menu.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="css/field.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="css/rating-menu.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="css/market-menu.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="css/header-right.css">
+</head>
+
+<body>
+<main>
+    <div id="grid-container">
+        <div id="grid-wrapper">
+            <div id="grid"></div>
+        </div>
+    </div>
+</main>
+
+<header>
+    <div class="header-left">
+        <div class="header-left-top">
+            <div class="level-box"><span id="level-value">0</span><span class="lvl">lvl</span></div>
+            <span class="resources-item">
+                <img class="resources-icon" src="images/coin.png" alt="Moneys" width="24">
+                <span id="money-count">0</span>
+            </span>
+            <span class="resources-item">
+                 <img class="resources-icon" src="images/people.png" alt="Population" width="24">
+                <span id="population-count">0</span>
+            </span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-bar-progress" id="progress-bar-value" style="width:0%"></div>
+            <span class="level-bar"></span>
+        </div>
+    </div>
+    <div class="header-center" id="header-center" style="display: none">
+        <div id="upgrade-notification" class="upgrade-popup">
+            <img id="upgrade-image" alt='улучшение' src=''>
+            <div>Улучшение <span id="upgrade-name"></span> активно! Осталось <span id="upgrade-timer">10</span> сек.</div>
+            <div class="progress-container">
+                <div id="upgrade-progress" class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="profile-dropdown">
+            <div class="profile-bar" onclick="toggleProfileMenu()">
+                <img src="images/user.png" alt="avatar" class="avatar-icon">
+                <span id="username-value" class="username"></span>
+                <span id="profile-dropdown-arrow" class="arrow">▼</span>
+            </div>
+
+            <div class="profile-menu hidden" id="profile-menu">
+                <div class="menu-button-wrapper">
+                    <a class="menu-block logout" asp-controller="Account" asp-action="Logout">
+                        <img class="user-icon" src="images/logout.png"/>
+                        <span class="profile-text">Выйти</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<footer>
+    <div class="footer-left">
+        <div class="footer-row">
+            <img class="menu-icon" src="images/shop.png" alt="Shop" onclick="openMenu('Магазин')">
+        </div>
+        <div class="footer-row">
+            <img class="menu-icon" src="images/backpack.png" alt="Chest" onclick="openMenu('Инвентарь')">
+        </div>
+    </div>
+    <button class="click-button">ТЫК</button>
+    <div class="footer-right">
+        <div class="footer-row">
+            <img class="menu-icon" src="images/rank.png" alt="Rank" onclick="openMenu('Рейтинг')">
+        </div>
+    </div>
+</footer>
+
+<div class="menu-overlay" id="menu-overlay" style="display: none;">
+    <div class="menu">
+        <button class="menu-close-btn" onclick="closeMenu()">×</button>
+        <div class="menu-title-container">
+            <h2 class="menu-title" id="menu-title-text">Menu</h2>
+            <div id="info-container" class="info-container hidden">
+                <img src="/images/i.png" class="info-icon" alt="Информация">
+                <div class="info-tooltip" id="info-tooltip">
+                    <h3 id="info-title">---</h3>
+                    <p id="info-text">---</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="menu-content">
+            <div id="inventory-grid" style="display: none;"></div>
+            <div id="market-list" class="market-list" style="display: none;"></div>
+            <div class="tabs" id="tabs" style="display: none;">
+                <button class="tab-button" id="popularity-tab" onclick="openTab('popularity')">Население</button>
+                <button class="tab-button" id="clicks-tab" onclick="openTab('clicks')">Клики</button>
+            </div>
+            <table id="popularity" class="rating-table" style="display: none;"></table>
+            <table id="clicks" class="rating-table" style="display: none;"></table>
+        </div>
+    </div>
+</div>
+<div id="info-overlay" class="overlay hidden">
+    <div class="info-window">
+        <button id="info-close" class="icon-btn close-btn">×</button>
+        <h3 id="info-title">---</h3>
+        <p  id="info-text">---</p>
+    </div>
+</div>
+
+
+
+<template id="market-item-template">
+    <div class="market-item">
+        <div class="market-item-level">Уровень <span class="market-item-level-value"></span></div>
+        <div class="market-item-img-container">
+            <img class="market-item-img">
+        </div>
+        <div class="cost">
+            <img src="images/coin.png" alt="Цена:">
+            <div class="market-item-cost-value"></div>
+        </div>
+        <div class="population">
+            <img src="images/people.png" alt="Население:">
+            <div class="market-item-info">
+                +<span class="market-item-info-current-value"></span>
+                <span class="market-item-info-next">
+                    →
+                    +<span class="market-item-info-next-value"></span>
+                </span>
+            </div>
+        </div>
+        <div class="market-item-level-required">
+            Откроется на уровне <span class="market-item-level-required-value"></span>
+        </div>
+    </div>
+</template>
+
+<script type="module" src="js/main.js"></script>
+</body>
+
+</html>

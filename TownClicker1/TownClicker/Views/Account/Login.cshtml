@@ -1,0 +1,58 @@
+﻿@using TownClicker.ViewModels
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Town Clicker</title>
+    <link rel='stylesheet' type='text/css' media='screen' href="/css/login.css">
+</head>
+
+<body style="overflow: hidden">
+<div class="login-container">
+    <div>
+        <p>
+            <h2>Войти</h2>
+        </p>
+        @if(!ViewData.ModelState.IsValid)
+        {
+            <div class="text-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p class="error-message">@error.ErrorMessage</p>
+                }
+            </div>
+        }
+        <div>
+            <div>
+                <form asp-action="Login">
+                    <div class="form-fields">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email">
+                        <span class="field-validation" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="form-fields">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password"/>
+                        <span class="field-validation" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="click-button">
+                        <input type="submit" value="Войти" />
+                        <a class="cancel-button" asp-controller="Home" asp-action="Index">Отмена</a>
+                    </div>
+                    <div class="bottom-links">
+                        <a asp-controller="Account" asp-action="Register">Регистрация</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
